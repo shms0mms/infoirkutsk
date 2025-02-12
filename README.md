@@ -1,3 +1,17 @@
+# ИнфоИркутск
+
+# OpenSource сайта ИнфоИркутск
+
+```bash
+bun install
+```
+
+```bash
+bun dev
+```
+
+## План действий на ближайшее время
+
 - [] - сделать фильтрацию в materials page
 - [] - сделать documents page
 - [] - сделать фильтрацию в documents page
