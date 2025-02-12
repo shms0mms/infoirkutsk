@@ -14,6 +14,7 @@ bun dev
 
 - [] - сделать фильтрацию в materials page
 - [] - сделать documents page
+- [] - создать модели document, material, notification, request, ...
 - [] - скачать документ материала
 - [] - сделать фильтрацию в documents page
 - [] - сделать роли для пользователей user/moderator
