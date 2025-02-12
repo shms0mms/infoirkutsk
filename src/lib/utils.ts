@@ -35,7 +35,7 @@ async function copyToClipboard(text: string, options?: ClipboardOptions) {
   try {
     await navigator.clipboard.writeText(text)
     if (options?.toast)
-      toast.success(options?.toastText ?? "Copied to clipboard")
+      toast.success(options?.toastText ?? "Скопировано в буфер обмена")
   } catch {
     if (options?.toast)
       toast.error(options?.toastErrorText ?? "Failed to copy to clipboard")

@@ -1,4 +1,4 @@
-const TASK_STATUS = ["completed", "in-progress", "to-do"] as const
+const MATERIAL_STATUS = ["accepted", "in-progress", "rejected"] as const
 const MAX_FILE_SIZE = {
   string: "1MB",
   number: 2 ** 20
@@ -10,6 +10,4 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp"
 ]
 
-const PROJECT_PLANS = ["Free", "Pro", "Enterprise"] as const
-
-export { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE, PROJECT_PLANS, TASK_STATUS }
+export { ACCEPTED_IMAGE_TYPES, MATERIAL_STATUS, MAX_FILE_SIZE }

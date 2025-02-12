@@ -13,19 +13,17 @@ export default function NotFoundPage() {
         <h1 className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl">
           404
         </h1>
-        <p className="mt-4 text-muted-foreground">
-          Oops, the page you are looking for does not exist.
-        </p>
+        <p className="mt-4 text-muted-foreground">Упс, страница не найдена</p>
         <div className="mt-6">
           <Link
-            href="/projects"
+            href="/"
             className={buttonVariants({
               size: "default",
               variant: "default"
             })}
             prefetch
           >
-            Go to Projects
+            На главную
           </Link>
         </div>
       </div>

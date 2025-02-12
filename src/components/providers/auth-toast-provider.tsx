@@ -12,7 +12,7 @@ export const AuthToastProvider: React.FC<React.PropsWithChildren> = ({
   useEffect(() => {
     setTimeout(() => {
       if (searchParams.get("fromSignIn")) {
-        toast.success("Successfully signed in.")
+        toast.success("Вы успешно вошли в систему.")
       }
     })
   }, [searchParams.toString()])

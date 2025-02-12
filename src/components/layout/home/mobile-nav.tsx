@@ -29,7 +29,7 @@ export const MobileNav = () => {
         <SheetHeader>
           <Button variant="link" asChild>
             <Link
-              href="/projects"
+              href="/"
               className="items-center !justify-start gap-2 px-0 pb-2 pt-1"
             >
               <Icons.icon className="h-8 w-8" />

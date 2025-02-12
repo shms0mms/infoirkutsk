@@ -37,7 +37,7 @@ export function UserNav({ className }: UserNavProps) {
   const sign = async (type: "out" | "in") => {
     if (type === "out") {
       await signOut()
-      toast.success(`Successfully signed out.`)
+      toast.success(`Вы успешно вышли из системы.`)
 
       router.push("/")
     } else router.push("/auth/sign-in")
@@ -67,11 +67,11 @@ export function UserNav({ className }: UserNavProps) {
                     {(user?.name ?? "guest").slice(0, 2).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <span className="sr-only">Open user menu</span>
+                <span className="sr-only">Открыть меню</span>
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent side="bottom">Profile</TooltipContent>
+          <TooltipContent side="bottom">Профиль</TooltipContent>
         </Tooltip>
       </TooltipProvider>
 
@@ -83,25 +83,27 @@ export function UserNav({ className }: UserNavProps) {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">
-              {user?.name ?? "Guest"}
+              {user?.name ?? "Гость"}
             </p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user?.email ?? "No email"}
-            </p>
+            {!!user?.email && (
+              <p className="text-xs leading-none text-muted-foreground">
+                {user?.email}
+              </p>
+            )}
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/projects" className="flex items-center">
+            <Link href="/dashboard" className="flex items-center">
               <LayoutGrid className="mr-3 h-4 w-4 text-muted-foreground" />
-              Projects
+              Панель управления
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer" asChild>
             <Link href="/settings" className="flex items-center">
               <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
-              Account settings
+              Настройки
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
@@ -117,12 +119,12 @@ export function UserNav({ className }: UserNavProps) {
             {user ? (
               <>
                 <LogOut className="mr-3 h-4 w-4 text-muted-foreground" />
-                Sign out
+                Выйти
               </>
             ) : (
               <>
                 <LogIn className="mr-3 h-4 w-4 text-muted-foreground" />
-                Sign in
+                Войти
               </>
             )}
           </DropdownMenuItem>

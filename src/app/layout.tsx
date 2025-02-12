@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/react"
 import { type Metadata } from "next"
-import { Comfortaa, Recursive } from "next/font/google"
+import { Comfortaa, Inter } from "next/font/google"
 import { type PropsWithChildren } from "react"
 import { Providers } from "@/components/providers"
 import { cn } from "@/lib/utils"
@@ -18,9 +18,9 @@ const comfortaa = Comfortaa({
   subsets: ["latin"],
   variable: "--font-comfortaa"
 })
-const recursive = Recursive({
-  subsets: ["latin"],
-  variable: "--font-recursive"
+const inter = Inter({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-inter"
 })
 
 type RootLayoutProps = {
@@ -34,7 +34,7 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(recursive.variable, comfortaa.variable, "font-recursive")}
+      className={cn(inter.variable, comfortaa.variable, "font-inter")}
       suppressHydrationWarning
     >
       <head>

@@ -53,8 +53,8 @@ export function ThemeToggle({
               }
             )}
           />
-          {expanded ? "Change theme" : null}
-          <span className="sr-only">Toggle theme</span>
+          {expanded ? "Сменить тему" : null}
+          <span className="sr-only">Сменить тему</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
@@ -62,13 +62,13 @@ export function ThemeToggle({
         className="w-[215px]"
       >
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          Светлая
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          Темная
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          Системная
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

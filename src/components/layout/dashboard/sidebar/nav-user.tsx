@@ -131,7 +131,7 @@ function UserLogout({ className }: UserMenuProps) {
       onClick={async () => {
         await signOut()
 
-        toast.success(`Successfully signed out.`)
+        toast.success(`Вы успешно вышли из системы.`)
         router.push("/")
       }}
       className={className}

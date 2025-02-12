@@ -27,7 +27,7 @@ export const fileRouter = {
     .middleware(() => {
       return {}
     })
-    .onUploadComplete(({ file }) => {
+    .onUploadComplete(({ file }: { file: any }) => {
       return { file }
     })
 } satisfies _FileRouter

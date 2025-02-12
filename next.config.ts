@@ -3,13 +3,6 @@ import "./src/env"
 
 const config: NextConfig = {
   transpilePackages: ["lucide-react"],
-  redirects: async () => [
-    {
-      source: "/dashboard",
-      destination: "/projects",
-      permanent: true
-    }
-  ],
   experimental: { dynamicIO: true, reactCompiler: true, useCache: true },
   images: {
     remotePatterns: [
