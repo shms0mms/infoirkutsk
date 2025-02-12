@@ -14,7 +14,7 @@ import {
 import { PROJECT_PLANS, TASK_STATUS } from "@/lib/constants"
 
 export const createCuid = init({
-  fingerprint: "tasklytic",
+  fingerprint: "infoirkutsk",
   length: 20
 })
 
@@ -24,7 +24,7 @@ export const createCuid = init({
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator(name => `tasklytic_${name}`)
+export const createTable = pgTableCreator(name => `infoirkutsk_${name}`)
 export const users = createTable("user", {
   id: varchar("id", { length: 255 })
     .notNull()

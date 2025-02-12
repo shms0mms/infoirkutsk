@@ -21,17 +21,17 @@ export const auth = betterAuth({
       enabled: true,
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET
-    },
-    github: {
-      enabled: true,
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET
-    },
-    discord: {
-      enabled: true,
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET
     }
+    // github: {
+    //   enabled: true,
+    //   clientId: env.GITHUB_CLIENT_ID,
+    //   clientSecret: env.GITHUB_CLIENT_SECRET
+    // },
+    // discord: {
+    //   enabled: true,
+    //   clientId: env.DISCORD_CLIENT_ID,
+    //   clientSecret: env.DISCORD_CLIENT_SECRET
+    // }
   },
 
   user: {

@@ -1,6 +1,5 @@
 "use client"
 
-import { DiscordLogoIcon, GitHubLogoIcon } from "@radix-ui/react-icons"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import Balancer from "react-wrap-balancer"
@@ -17,13 +16,13 @@ import { Icons } from "@/components/ui/icons"
 import { Separator } from "@/components/ui/separator"
 import { signIn } from "@/lib/auth"
 
-export default async function SignInPage() {
+export default function SignInPage() {
   const searchParams = useSearchParams()
 
-  const signInWith = async (provider: "discord" | "google" | "github") => {
+  const signInWith = async (provider: "google") => {
     const callbackUrl = searchParams.get("callbackUrl")
       ? decodeURIComponent(searchParams.get("callbackUrl")!)
-      : "/projects"
+      : "/"
     const callbackUrlSearchParams = new URLSearchParams({ callbackUrl })
     callbackUrlSearchParams.set("fromSignIn", "true")
 
@@ -46,14 +45,6 @@ export default async function SignInPage() {
             <Separator />
           </CardHeader>
           <CardContent className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => signInWith("github")}
-            >
-              <GitHubLogoIcon className="mr-2 h-5 w-5" />
-              Sign in with GitHub
-            </Button>
             <Separator className="mx-auto w-4" />
             <Button
               variant="outline"
@@ -64,14 +55,6 @@ export default async function SignInPage() {
               Sign in with Google
             </Button>
             <Separator className="mx-auto w-4" />
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => signInWith("discord")}
-            >
-              <DiscordLogoIcon className="mr-2 h-5 w-5" />
-              Sign in with Discord
-            </Button>
           </CardContent>
           <CardFooter>
             <p className="text-center text-sm font-thin">
