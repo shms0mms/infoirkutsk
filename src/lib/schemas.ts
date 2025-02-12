@@ -14,7 +14,7 @@ enum FILE_TYPE {
 }
 const materialSchema = z.object({
   title: z.string(),
-  comments: z.boolean().default(false),
+  comments: z.string(),
   fileType: z.nativeEnum(FILE_TYPE),
   fileUrl: z.string().url(),
   author: z.string(),
@@ -22,7 +22,7 @@ const materialSchema = z.object({
 })
 const createMaterialSchema = z.object({
   title: z.string(),
-  comments: z.boolean().default(false),
+  comments: z.string(),
   fileUrl: z.string().url(),
   author: z.string(),
   publishedAt: z.date()
@@ -45,6 +45,7 @@ const sortByWithLabel = [
 const order = ["asc", "desc"] as const
 
 export {
+  FILE_TYPE,
   order,
   settingsSchema,
   sortBy,

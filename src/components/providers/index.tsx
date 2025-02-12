@@ -10,7 +10,7 @@ import { TRPCReactProvider } from "@/trpc/react"
 export function Providers({ children }: React.PropsWithChildren) {
   return (
     <TRPCReactProvider>
-      <NextThemesProvider attribute="class" defaultTheme="system" enableSystem>
+      <NextThemesProvider attribute="class" defaultTheme="light`" enableSystem>
         <UserSettingsStoreProvider>
           <AuthToastProvider>{children}</AuthToastProvider>
         </UserSettingsStoreProvider>

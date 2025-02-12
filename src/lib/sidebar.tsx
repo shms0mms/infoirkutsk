@@ -1,4 +1,11 @@
-import { FileIcon, FolderIcon, LayoutDashboard } from "lucide-react"
+import {
+  FileIcon,
+  FilesIcon,
+  FileText,
+  FolderIcon,
+  Home,
+  LayoutDashboard
+} from "lucide-react"
 import { useParams, usePathname } from "next/navigation"
 import { type FC } from "react"
 
@@ -38,10 +45,28 @@ export function useSidebarNav(): SidebarNav {
   return {
     navMain: [
       {
-        title: "Dashboard",
+        title: "Главная",
+        href: "/",
+        icon: Home,
+        isActive: pathname === "/"
+      },
+      {
+        title: "Панель управления",
         href: "/dashboard",
         icon: LayoutDashboard,
-        isActive: pathname === "/dashboard"
+        isActive: pathname === "/projects"
+      },
+      {
+        title: "Мои материалы",
+        href: "/projects/materials",
+        icon: FilesIcon,
+        isActive: pathname === "/projects/materials"
+      },
+      {
+        title: "Мои документы",
+        href: "/projects/documents",
+        icon: FileText,
+        isActive: pathname === "/projects/documents"
       }
     ]
   }

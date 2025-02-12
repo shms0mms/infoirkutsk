@@ -10,7 +10,6 @@ import { TRPCError, initTRPC } from "@trpc/server"
 import superjson from "superjson"
 import { ZodError } from "zod"
 import { ArgumentTypes } from "@/types/utils"
-import { sleep } from "@/lib/utils"
 import { auth } from "@/server/auth"
 import { db } from "@/server/db"
 
@@ -91,8 +90,8 @@ const timingMiddleware = t.middleware(async ({ next, path }) => {
 
   if (t._config.isDev) {
     // artificial delay in dev
-    const waitMs = Math.floor(Math.random() * 400) + 100
-    await sleep(waitMs)
+    // const waitMs = Math.floor(Math.random() * 400) + 100
+    // await sleep(waitMs)
   }
 
   const result = await next()

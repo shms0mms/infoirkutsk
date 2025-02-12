@@ -1,13 +1,8 @@
 "use client"
 
-import {
-  BadgeCheck,
-  Bell,
-  ChevronsUpDown,
-  CreditCard,
-  LogOut,
-  Sparkles
-} from "lucide-react"
+import { CaretSortIcon } from "@radix-ui/react-icons"
+import { type User } from "better-auth"
+import { Bell, LogOut, Send } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -26,12 +21,11 @@ import {
   SidebarMenuItem,
   useSidebar
 } from "@/components/ui/sidebar"
-import { Skeleton } from "@/components/ui/skeleton"
-import { signOut, useSession } from "@/lib/auth"
+import { signOut } from "@/lib/auth"
 
-export function NavUser() {
+export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar()
-
+  const router = useRouter()
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -41,8 +35,17 @@ export function NavUser() {
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
-              <UserInfo />
-              <ChevronsUpDown className="ml-auto size-4" />
+              <Avatar className="h-8 w-8 rounded-lg">
+                <AvatarImage src={user?.image!} alt={user?.name!} />
+                <AvatarFallback className="rounded-lg">
+                  {user?.name?.slice(0, 2)}
+                </AvatarFallback>
+              </Avatar>
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">{user?.name}</span>
+                <span className="truncate text-xs">{user?.email}</span>
+              </div>
+              <CaretSortIcon className="ml-auto size-4" />
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -53,91 +56,41 @@ export function NavUser() {
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <UserInfo />
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage src={user?.image!} alt={user?.name!} />
+                </Avatar>
+                <div className="grid flex-1 text-left text-sm leading-tight">
+                  <span className="truncate font-semibold">{user?.name}</span>
+                  <span className="truncate text-xs">{user?.email}</span>
+                </div>
               </div>
             </DropdownMenuLabel>
+
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem className="gap-2.5">
-                <Sparkles />
-                Upgrade to Pro
+              <DropdownMenuItem>
+                <Send />
+                Заявки на публикацию
               </DropdownMenuItem>
-            </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem className="gap-2.5">
-                <BadgeCheck />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2.5">
-                <CreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2.5">
+              <DropdownMenuItem>
                 <Bell />
-                Notifications
+                Уведомления
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <UserLogout className="gap-2.5" />
+            <DropdownMenuItem
+              onClick={() => {
+                signOut()
+                toast.success(`Вы успешно вышли из системы.`)
+                router.push("/")
+              }}
+            >
+              <LogOut />
+              Выйти
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
-}
-
-function UserInfo() {
-  const { data: session } = useSession()
-
-  return (
-    <>
-      {session ? (
-        <Avatar className="h-8 w-8 rounded-lg">
-          <AvatarImage src={session.user.image!} alt={session.user.name} />
-          <AvatarFallback className="rounded-lg">
-            {session.user.name.slice(0, 2).toUpperCase()}
-          </AvatarFallback>
-        </Avatar>
-      ) : (
-        <Skeleton className="h-8 w-8" />
-      )}
-      <div className="grid flex-1 text-left text-sm leading-tight">
-        {session ? (
-          <>
-            <span className="truncate font-semibold">{session.user.name}</span>
-            <span className="truncate text-xs">{session.user.email}</span>
-          </>
-        ) : (
-          <>
-            <Skeleton className="h-6 w-10" />
-            <Skeleton className="h-4 w-16" />
-          </>
-        )}
-      </div>
-    </>
-  )
-}
-
-type UserMenuProps = {
-  className?: string
-}
-
-function UserLogout({ className }: UserMenuProps) {
-  const router = useRouter()
-
-  return (
-    <DropdownMenuItem
-      onClick={async () => {
-        await signOut()
-
-        toast.success(`Вы успешно вышли из системы.`)
-        router.push("/")
-      }}
-      className={className}
-    >
-      <LogOut />
-      Log out
-    </DropdownMenuItem>
   )
 }

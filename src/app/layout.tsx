@@ -41,7 +41,7 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="32x32" />
         <link rel="icon" href="/icon.svg" sizes="any" type="image/svg+" />
       </head>
-      <body>
+      <body cz-shortcut-listen="false">
         <Providers>
           {children}
           {modal}
