@@ -1,1 +1,1 @@
-export { HomeLayout as default } from "@/components/layout/home"
+export { default as HomeLayout } from "@/components/layout/home"

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 
 type HomeLayoutProps = { className?: string }
 
-export const HomeLayout: FC<PropsWithChildren<HomeLayoutProps>> = ({
+const HomeLayout: FC<PropsWithChildren<HomeLayoutProps>> = ({
   children,
   className
 }) => {
@@ -22,3 +22,4 @@ export const HomeLayout: FC<PropsWithChildren<HomeLayoutProps>> = ({
     </>
   )
 }
+export default HomeLayout
