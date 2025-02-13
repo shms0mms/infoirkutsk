@@ -1,4 +1,4 @@
-const MATERIAL_STATUS = ["accepted", "in-progress", "rejected"] as const
+const STATUS = ["accepted", "in-progress", "rejected"] as const
 const MAX_FILE_SIZE = {
   string: "1MB",
   number: 2 ** 20
@@ -10,4 +10,4 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp"
 ]
 
-export { ACCEPTED_IMAGE_TYPES, MATERIAL_STATUS, MAX_FILE_SIZE }
+export { ACCEPTED_IMAGE_TYPES, MAX_FILE_SIZE, STATUS }

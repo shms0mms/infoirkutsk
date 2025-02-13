@@ -8,17 +8,18 @@ import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
 import { DocumentCard } from "@/components/documents/document-card"
 import { MaterialCard } from "@/components/materials/material-card"
 import { siteConfig } from "@/config"
-import { FILE_TYPE } from "@/lib/schemas"
+import { FILE_TYPE, STATUS } from "@/lib/schemas"
 
 export default function Home() {
   const exampleMaterial = {
     title: "Интерактивные уроки по алгоритмизации",
-    comments:
+    description:
       "Этот материал содержит серию интерактивных уроков, направленных на обучение основам алгоритмизации. Включает в себя презентации, практические задания и тесты для закрепления материала.",
     fileType: FILE_TYPE.pdf,
     fileUrl: "/path/to/your/file.pdf",
     author: "Иванов Иван Иванович",
-    publishedAt: new Date("2023-06-15T14:30:00Z")
+    publishedAt: new Date("2023-06-15T14:30:00Z"),
+    status: STATUS.accepted
   }
   const exampleDocument = {
     title: "Приказ о проведении итоговой аттестации по информатике",

@@ -15,7 +15,7 @@ import { MaterialSchema } from "@/lib/schemas"
 
 export function MaterialCard({
   title,
-  comments,
+  description,
   fileType,
   fileUrl,
   author,
@@ -48,7 +48,7 @@ export function MaterialCard({
       </CardHeader>
       <CardContent>
         <h3 className="font-semibold mb-2">Комментарии к публикации:</h3>
-        <p className="text-gray-600">{comments}</p>
+        <p className="text-gray-600">{description}</p>
         <div className="mt-4">
           <p className="text-sm text-gray-500">Предмет: Информатика</p>
           <p className="text-sm text-gray-500">

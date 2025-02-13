@@ -1,11 +1,4 @@
-import {
-  FileIcon,
-  FilesIcon,
-  FileText,
-  FolderIcon,
-  Home,
-  LayoutDashboard
-} from "lucide-react"
+import { FilesIcon, FileText, Home, LayoutDashboard } from "lucide-react"
 import { useParams, usePathname } from "next/navigation"
 import { type FC } from "react"
 
@@ -70,19 +63,4 @@ export function useSidebarNav(): SidebarNav {
       }
     ]
   }
-}
-function Emoji({
-  emoji,
-  type
-}: {
-  emoji: string | null
-  type: "note" | "folder"
-}) {
-  return emoji ? (
-    <span className="text-lg">{emoji}</span>
-  ) : type === "note" ? (
-    <FileIcon size={18} />
-  ) : (
-    <FolderIcon size={18} />
-  )
 }

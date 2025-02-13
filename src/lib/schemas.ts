@@ -12,23 +12,49 @@ enum FILE_TYPE {
   "word" = "word",
   "pdf" = "pdf"
 }
+enum STATUS {
+  "accepted" = "accepted",
+  "in-progress" = "in-progress",
+  "rejected" = "rejected"
+}
 const materialSchema = z.object({
   title: z.string(),
-  comments: z.string(),
+  description: z.string(),
+  fileType: z.nativeEnum(FILE_TYPE),
+  fileUrl: z.string().url(),
+  author: z.string(),
+  publishedAt: z.date(),
+  status: z.nativeEnum(STATUS)
+})
+const createMaterialSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  fileUrl: z.string().url(),
+  author: z.string(),
+  publishedAt: z.date(),
+  status: z.nativeEnum(STATUS),
+  fileType: z.nativeEnum(FILE_TYPE)
+})
+type MaterialSchema = z.infer<typeof materialSchema>
+type CreateMaterialSchema = z.infer<typeof createMaterialSchema>
+
+const documentSchema = z.object({
+  title: z.string(),
+  description: z.string(),
   fileType: z.nativeEnum(FILE_TYPE),
   fileUrl: z.string().url(),
   author: z.string(),
   publishedAt: z.date()
 })
-const createMaterialSchema = z.object({
+const createDocumentSchema = z.object({
   title: z.string(),
-  comments: z.string(),
+  description: z.string(),
   fileUrl: z.string().url(),
   author: z.string(),
   publishedAt: z.date()
 })
-type MaterialSchema = z.infer<typeof materialSchema>
-type CreateMaterialSchema = z.infer<typeof createMaterialSchema>
+type DocumentSchema = z.infer<typeof documentSchema>
+type CreateDocumentSchema = z.infer<typeof createDocumentSchema>
 
 const sortBy = ["publishedAt", "createdAt"] as const
 const sortByWithLabel = [
@@ -50,7 +76,10 @@ export {
   settingsSchema,
   sortBy,
   sortByWithLabel,
+  STATUS,
+  type CreateDocumentSchema,
   type CreateMaterialSchema,
+  type DocumentSchema,
   type MaterialSchema,
   type SettingsSchema
 }

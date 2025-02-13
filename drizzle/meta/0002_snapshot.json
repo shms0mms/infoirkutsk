@@ -1,6 +1,6 @@
 {
-  "id": "bdeb467f-b78b-4437-bd1d-7d57fafa6fbe",
-  "prevId": "83cf7b5b-357b-44ad-ad8a-7a905ba76bd9",
+  "id": "ff339b18-5df0-4d08-8e91-3eb19a46ed30",
+  "prevId": "bdeb467f-b78b-4437-bd1d-7d57fafa6fbe",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -164,12 +164,6 @@
           "notNull": false,
           "default": "CURRENT_TIMESTAMP"
         },
-        "database_id": {
-          "name": "database_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp with time zone",
@@ -184,21 +178,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "infoirkutsk_document_database_id_infoirkutsk_database_id_fk": {
-          "name": "infoirkutsk_document_database_id_infoirkutsk_database_id_fk",
-          "tableFrom": "infoirkutsk_document",
-          "tableTo": "infoirkutsk_database",
-          "columnsFrom": [
-            "database_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
@@ -230,12 +210,6 @@
           "primaryKey": false,
           "notNull": true
         },
-        "database_id": {
-          "name": "database_id",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": true
-        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp with time zone",
@@ -257,21 +231,7 @@
         }
       },
       "indexes": {},
-      "foreignKeys": {
-        "infoirkutsk_material_database_id_infoirkutsk_database_id_fk": {
-          "name": "infoirkutsk_material_database_id_infoirkutsk_database_id_fk",
-          "tableFrom": "infoirkutsk_material",
-          "tableTo": "infoirkutsk_database",
-          "columnsFrom": [
-            "database_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {}
     },
