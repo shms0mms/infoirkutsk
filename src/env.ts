@@ -9,7 +9,7 @@ export const env = createEnv({
   server: {
     NODE_ENV: z
       .enum(["development", "test", "production"])
-      .default("production"),
+      .default("development"),
     DATABASE_URL: z.string().url(),
     // Better auth
     BETTER_AUTH_SECRET: z.string(),
