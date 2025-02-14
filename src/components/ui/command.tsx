@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
-    children: React.ReactNode
+    children?: React.ReactNode
   }
 >(({ className, children, ...props }, ref) => (
   <CommandPrimitive
