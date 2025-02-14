@@ -19,7 +19,7 @@ const TRANSITION = {
 }
 
 function useClickOutside(
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<HTMLDivElement | null>,
   handler: () => void
 ) {
   useEffect(() => {
