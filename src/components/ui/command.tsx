@@ -7,10 +7,12 @@ import * as React from "react"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import { cn } from "@/lib/utils"
 
-// Компонент Command с правильными типами
+// Компонент Command с правильными типами для children
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive>
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive> & {
+    children: React.ReactNode
+  }
 >(({ className, children, ...props }, ref) => (
   <CommandPrimitive
     ref={ref}
