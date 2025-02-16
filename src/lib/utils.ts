@@ -24,6 +24,15 @@ function isCuid(string: string) {
 
   return isCuid2(string)
 }
+function fromArrayToObject(entries: string[]) {
+  return entries.reduce(
+    (acc, entry) => {
+      acc[entry] = entry
+      return acc
+    },
+    {} as Record<string, string>
+  )
+}
 
 type ClipboardOptions = {
   toast?: boolean
@@ -81,6 +90,7 @@ export {
   cn,
   copyToClipboard,
   exportFile,
+  fromArrayToObject,
   importFile,
   isCuid,
   openInNewTab,

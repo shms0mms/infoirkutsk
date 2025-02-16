@@ -1,7 +1,10 @@
+import { adminClient } from "better-auth/client/plugins"
 import { createAuthClient } from "better-auth/react"
+import { getBaseUrl } from "@/trpc/react"
 
-const authClient = createAuthClient({
-  baseURL: "http://localhost:3000"
+export const authClient = createAuthClient({
+  baseURL: getBaseUrl(),
+  plugins: [adminClient()]
 })
 
 export const { signIn, signOut, useSession } = authClient

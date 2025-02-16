@@ -1,6 +1,7 @@
 import { betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { nextCookies } from "better-auth/next-js"
+import { admin } from "better-auth/plugins"
 import { db } from "./db"
 import { env } from "@/env"
 import * as schema from "@/server/db/schema"
@@ -9,9 +10,9 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
-      user: schema.users,
-      session: schema.sessions,
-      account: schema.accounts,
+      user: schema.user,
+      session: schema.session,
+      account: schema.account,
       verification: schema.verification
     }
   }),
@@ -22,37 +23,11 @@ export const auth = betterAuth({
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET
     }
-    // github: {
-    //   enabled: true,
-    //   clientId: env.GITHUB_CLIENT_ID,
-    //   clientSecret: env.GITHUB_CLIENT_SECRET
-    // },
-    // discord: {
-    //   enabled: true,
-    //   clientId: env.DISCORD_CLIENT_ID,
-    //   clientSecret: env.DISCORD_CLIENT_SECRET
-    // }
   },
 
-  user: {
-    additionalFields: {
-      customerId: {
-        type: "string",
-        required: false,
-        unique: true,
-        input: false
-      },
-      subscriptionId: {
-        type: "string",
-        required: false,
-        unique: true,
-        input: false
-      }
-    }
-  },
+  user: {},
 
-  // Plugins
-  plugins: [nextCookies()]
+  plugins: [nextCookies(), admin()]
 })
 
 export type Session = typeof auth.$Infer.Session

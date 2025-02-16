@@ -2,6 +2,7 @@
 
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -14,23 +15,12 @@ import {
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
 
-interface FilterPanelProps {
-  onFilterChange: (filters: FilterState) => void
-}
-
-interface FilterState {
-  title: string
-  description: string
-  startDate: Date | undefined
-  endDate: Date | undefined
-}
-
-export function FilterPanel({ onFilterChange }: FilterPanelProps) {
-  const [filters, setFilters] = useState<FilterState>({
-    title: "",
-    description: "",
-    startDate: undefined,
-    endDate: undefined
+export function FilterPanel() {
+  const [filters, setFilters] = useState({
+    titleTerm: "",
+    descriptionTerm: "",
+    publishedAtFrom: "",
+    publishedAtTo: ""
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,14 +30,19 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
 
   const handleDateChange = (
     date: Date | undefined,
-    type: "startDate" | "endDate"
+    type: "publishedAtFrom" | "publishedAtFrom"
   ) => {
     setFilters(prev => ({ ...prev, [type]: date }))
   }
-
+  const searchParams = useSearchParams()
+  const page = searchParams.get("page")
+  const pageQuery = page ? (isNaN(+page) ? 1 : +page) : 1
+  const router = useRouter()
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onFilterChange(filters)
+    const searchParams = new URLSearchParams(Object.entries(filters))
+    searchParams.set("page", pageQuery.toString())
+    router.push(`/documents?${searchParams.toString()}`)
   }
 
   return (
@@ -56,8 +51,8 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
         <Label htmlFor="title">Заголовок</Label>
         <Input
           id="title"
-          name="title"
-          value={filters.title}
+          name="titleTerm"
+          value={filters.titleTerm}
           onChange={handleInputChange}
           placeholder="Поиск по заголовку"
         />
@@ -67,7 +62,7 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
         <Input
           id="description"
           name="description"
-          value={filters.description}
+          value={filters.descriptionTerm}
           onChange={handleInputChange}
           placeholder="Поиск по описанию"
         />
@@ -80,12 +75,12 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
               variant={"outline"}
               className={cn(
                 "w-full justify-start text-left font-normal",
-                !filters.startDate && "text-muted-foreground"
+                !filters.publishedAtFrom && "text-muted-foreground"
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {filters.startDate ? (
-                format(filters.startDate, "PPP")
+              {filters.publishedAtFrom ? (
+                format(filters.publishedAtFrom, "PPP")
               ) : (
                 <span>Выберите дату</span>
               )}
@@ -94,8 +89,8 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
-              selected={filters.startDate}
-              onSelect={date => handleDateChange(date, "startDate")}
+              selected={new Date(filters.publishedAtFrom)}
+              onSelect={date => handleDateChange(date, "publishedAtFrom")}
               initialFocus
             />
           </PopoverContent>
@@ -109,12 +104,12 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
               variant={"outline"}
               className={cn(
                 "w-full justify-start text-left font-normal",
-                !filters.endDate && "text-muted-foreground"
+                !filters.publishedAtFrom && "text-muted-foreground"
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
-              {filters.endDate ? (
-                format(filters.endDate, "PPP")
+              {filters.publishedAtFrom ? (
+                format(filters.publishedAtFrom, "PPP")
               ) : (
                 <span>Выберите дату</span>
               )}
@@ -123,8 +118,8 @@ export function FilterPanel({ onFilterChange }: FilterPanelProps) {
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
-              selected={filters.endDate}
-              onSelect={date => handleDateChange(date, "endDate")}
+              selected={new Date(filters.publishedAtFrom)}
+              onSelect={date => handleDateChange(date, "publishedAtFrom")}
               initialFocus
             />
           </PopoverContent>

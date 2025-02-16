@@ -7,51 +7,59 @@ const settingsSchema = z.object({
 })
 type SettingsSchema = z.infer<typeof settingsSchema>
 
-enum FILE_TYPE {
-  "excel" = "excel",
-  "word" = "word",
-  "pdf" = "pdf"
-}
-enum STATUS {
-  "accepted" = "accepted",
-  "in-progress" = "in-progress",
-  "rejected" = "rejected"
-}
+const FILE_TYPE = ["excel", "word", "pdf"] as const
+const STATUS = ["accepted", "in-progress", "rejected"] as const
+const ROLE = ["user", "moderator"] as const
+
 const materialSchema = z.object({
+  id: z.string(),
   title: z.string(),
   description: z.string(),
-  fileType: z.nativeEnum(FILE_TYPE),
+  fileType: z.enum(FILE_TYPE),
   fileUrl: z.string().url(),
   author: z.string(),
-  publishedAt: z.date(),
-  status: z.nativeEnum(STATUS)
+  status: z.enum(STATUS),
+  createdAt: z.date().nullable(),
+  updatedAt: z.date().nullable(),
+  userId: z.string(),
+  publishedAt: z.date().nullable()
 })
+
 const createMaterialSchema = z.object({
   title: z.string(),
   description: z.string(),
   fileUrl: z.string().url(),
   author: z.string(),
   publishedAt: z.date(),
-  status: z.nativeEnum(STATUS),
-  fileType: z.nativeEnum(FILE_TYPE)
+  status: z.enum(STATUS),
+  fileType: z.enum(FILE_TYPE)
+})
+const notificationSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  description: z.string(),
+  link: z.string().url(),
+  createdAt: z.date(),
+  userId: z.string()
 })
 type MaterialSchema = z.infer<typeof materialSchema>
 type CreateMaterialSchema = z.infer<typeof createMaterialSchema>
-
+type NotificationSchema = z.infer<typeof notificationSchema>
 const documentSchema = z.object({
   title: z.string(),
   description: z.string(),
-  fileType: z.nativeEnum(FILE_TYPE),
-  fileUrl: z.string().url(),
-  author: z.string(),
-  publishedAt: z.date()
+  link: z.string().url(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+  userId: z.string(),
+  id: z.string()
 })
 const createDocumentSchema = z.object({
   title: z.string(),
   description: z.string(),
-  fileUrl: z.string().url(),
-  author: z.string(),
-  publishedAt: z.date()
+  link: z.string().url(),
+  publishedAt: z.date(),
+  userId: z.string()
 })
 type DocumentSchema = z.infer<typeof documentSchema>
 type CreateDocumentSchema = z.infer<typeof createDocumentSchema>
@@ -71,8 +79,10 @@ const sortByWithLabel = [
 const order = ["asc", "desc"] as const
 
 export {
+  createMaterialSchema,
   FILE_TYPE,
   order,
+  ROLE,
   settingsSchema,
   sortBy,
   sortByWithLabel,
@@ -81,5 +91,6 @@ export {
   type CreateMaterialSchema,
   type DocumentSchema,
   type MaterialSchema,
+  type NotificationSchema,
   type SettingsSchema
 }

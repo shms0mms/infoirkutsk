@@ -47,19 +47,19 @@ export function useSidebarNav(): SidebarNav {
         title: "Панель управления",
         href: "/dashboard",
         icon: LayoutDashboard,
-        isActive: pathname === "/projects"
+        isActive: pathname === "/dashboard"
       },
       {
         title: "Мои материалы",
-        href: "/projects/materials",
+        href: "/dashboard/materials",
         icon: FilesIcon,
-        isActive: pathname === "/projects/materials"
+        isActive: pathname === "/dashboard/materials"
       },
       {
         title: "Мои документы",
-        href: "/projects/documents",
+        href: "/dashboard/documents",
         icon: FileText,
-        isActive: pathname === "/projects/documents"
+        isActive: pathname === "/dashboard/documents"
       }
     ]
   }

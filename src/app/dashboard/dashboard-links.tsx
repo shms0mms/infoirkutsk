@@ -7,7 +7,7 @@ import {
   CardTitle
 } from "@/components/ui/card"
 
-export function ProjectsLink({
+export function DashboardLink({
   href,
   title,
   desc,
@@ -33,32 +33,32 @@ export function ProjectsLink({
   )
 }
 
-export function ProjectLinks() {
+export function DashboardLinks() {
   return (
     <div className="flex flex-col space-y-4 w-full max-w-7xl">
-      <ProjectsLink
-        href="/projects/documents"
+      <DashboardLink
+        href="/dashboard/documents"
         title="Документы"
         desc="Ваши документы"
         icon={<FileTextIcon size={24} className="text-blue-500" />}
       />
 
-      <ProjectsLink
-        href="/projects/materials"
+      <DashboardLink
+        href="/dashboard/materials"
         title="Материалы"
         desc="Методические разработки и учебные материалы"
         icon={<FolderIcon size={24} className="text-blue-500" />}
       />
 
-      <ProjectsLink
-        href="/projects/requests"
+      <DashboardLink
+        href="/dashboard/requests"
         title="Заявки на публикацию"
         desc="Вы, как модератор, одобряете/отклоняете публикацию той или иной заявки на публикацию"
         icon={<GitPullRequest size={24} className="text-blue-500" />}
       />
 
-      <ProjectsLink
-        href="/projects/notifications"
+      <DashboardLink
+        href="/dashboard/notifications"
         title="Ваши уведомления"
         desc="Уведомления о публикации и обновлениях ваших материалов"
         icon={<Bell size={24} className="text-yellow-500" />}

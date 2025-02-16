@@ -1,36 +1,37 @@
-import { count } from "drizzle-orm"
+import { asc, count, eq } from "drizzle-orm"
 import { z } from "zod"
 import { isCuid } from "@/lib/utils"
-import { CreateMaterialSchema } from "@/lib/schemas"
+import { createMaterialSchema } from "@/lib/schemas"
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure
 } from "@/server/api/trpc"
-import { materials } from "@/server/db/schema"
+import { material } from "@/server/db/schema"
 
 export const materialRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
       z.object({
-        page: z.number().transform(page => page - 1)
+        page: z.number().transform(page => page - 1),
+        limit: z.number().default(30)
       })
     )
     .query(async ({ ctx, input }) => {
+      const limit = input.limit
       const countQuery = ctx.db
         .select({
           count: count()
         })
-        .from(materials)
-
-      const tasksQuery = ctx.db.query.materials.findMany({
-        limit: 30,
-        offset: input.page * input.page - 1
-      })
-      const result = await Promise.all([countQuery, tasksQuery])
-      const tasksCount = result[0][0]!.count
-      const tasks = result[1]
-      return [tasksCount, tasks]
+        .from(material)
+        .then(result => result[0]!.count)
+      return await Promise.all([
+        ctx.db.query.material.findMany({
+          limit,
+          offset: input.page * input.page - 1
+        }),
+        countQuery
+      ])
     }),
   getLast: publicProcedure
     .input(
@@ -38,21 +39,12 @@ export const materialRouter = createTRPCRouter({
         page: z.number().transform(page => page - 1)
       })
     )
-    .query(async ({ ctx, input }) => {
-      const countQuery = ctx.db
-        .select({
-          count: count()
-        })
-        .from(materials)
-
-      const tasksQuery = ctx.db.query.materials.findMany({
-        limit: 30,
-        offset: input.page * input.page - 1
+    .query(async ({ ctx }) => {
+      return ctx.db.query.material.findMany({
+        where: eq(material.status, "accepted"),
+        limit: 10,
+        orderBy: [asc(material.publishedAt)]
       })
-      const result = await Promise.all([countQuery, tasksQuery])
-      const tasksCount = result[0][0]!.count
-      const tasks = result[1]
-      return [tasksCount, tasks]
     }),
   getById: publicProcedure
     .input(
@@ -63,18 +55,18 @@ export const materialRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       if (!isCuid(input.id)) return undefined
 
-      return await ctx.db.query.materials.findFirst({
-        where: (materialsTable, { eq }) => eq(materialsTable.id, input.id)
+      return await ctx.db.query.material.findFirst({
+        where: eq(material.id, input.id)
       })
     }),
+  create: protectedProcedure
+    .input(createMaterialSchema)
+    .mutation(async ({ ctx, input }) => {
+      const result = await ctx.db.insert(material).values({
+        ...input,
+        userId: ctx.session.user.id
+      })
 
-  create: protectedProcedure.mutation(async ({ ctx, input }) => {
-    const material: CreateMaterialSchema = input as any as CreateMaterialSchema
-    const result = await ctx.db.insert(materials).values({
-      ...material,
-      userId: ctx.session.user.id
+      return result
     })
-
-    return result
-  })
 })

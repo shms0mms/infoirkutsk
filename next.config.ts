@@ -3,7 +3,7 @@ import "./src/env"
 
 const config: NextConfig = {
   transpilePackages: ["lucide-react"],
-  experimental: { dynamicIO: true, reactCompiler: true },
+  experimental: { reactCompiler: true },
   images: {
     remotePatterns: [
       {

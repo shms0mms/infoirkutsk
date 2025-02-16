@@ -1,5 +1,5 @@
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { ProjectLinks } from "./projects-links"
+import { DashboardLinks } from "./dashboard-links"
 
 export default async function DashboardPage() {
   const materials = []
@@ -14,11 +14,10 @@ export default async function DashboardPage() {
       </header>
       <div className="my-20 flex flex-col gap-16">
         <section className="flex flex-col items-center justify-center">
-          {/*  Здесь табы (активные материалы, неактивные материалы, на рассмотрении) */}
           <h2 className="text-3xl font-bold mb-5">
             Выберите пункт, который вас интересует
           </h2>
-          <ProjectLinks />
+          <DashboardLinks />
         </section>
       </div>
     </>

@@ -7,110 +7,77 @@ import {
   timestamp,
   varchar
 } from "drizzle-orm/pg-core"
-import { STATUS } from "@/lib/constants"
+import { FILE_TYPE, STATUS } from "@/lib/schemas"
 
-// Инициализация CUID
 export const createCuid = init({
   fingerprint: "infoirkutsk",
   length: 20
 })
 
-// Создание таблицы с уникальным именем
 export const createTable = pgTableCreator(name => `infoirkutsk_${name}`)
 
-export const users = createTable("user", {
-  id: varchar("id", { length: 255 })
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => createCuid()),
-  name: varchar("name", { length: 255 }).notNull(),
-  description: varchar("description", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: boolean("email_verified").default(false),
-  image: varchar("image", { length: 255 }),
-  customerId: varchar("customer_id", { length: 255 }).unique(),
-  subscriptionId: varchar("subscription_id", { length: 255 }).unique(),
-  createdAt: timestamp("created_at", {
-    mode: "date",
-    withTimezone: true
-  }).default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: timestamp("updated_at", {
-    mode: "date",
-    withTimezone: true
-  }).$onUpdateFn(() => new Date())
+export const user = createTable("user", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").notNull(),
+  image: text("image"),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+  role: varchar("role", { length: 255, enum: STATUS }).notNull(),
+  banned: boolean("banned"),
+  banReason: text("ban_reason"),
+  banExpires: timestamp("ban_expires")
 })
 
-// Таблица учетных записей
-export const accounts = createTable("account", {
-  id: varchar("id", { length: 255 })
+export const session = createTable("session", {
+  id: text("id").primaryKey(),
+  expiresAt: timestamp("expires_at").notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  userId: text("user_id")
     .notNull()
-    .primaryKey()
-    .$defaultFn(() => createCuid()),
-  accountId: varchar("account_id", { length: 255 }).notNull(),
-  providerId: varchar("provider_id", { length: 255 }).notNull(),
-  userId: varchar("user_id", { length: 255 })
+    .references(() => user.id, { onDelete: "cascade" }),
+  impersonatedBy: text("impersonated_by")
+})
+
+export const account = createTable("account", {
+  id: text("id").primaryKey(),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => user.id, { onDelete: "cascade" }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
   accessTokenExpiresAt: timestamp("access_token_expires_at"),
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-  scope: varchar("scope", { length: 255 }),
-  password: varchar("password", { length: 255 }),
-  createdAt: timestamp("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$onUpdateFn(() => new Date())
-    .notNull()
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull()
 })
 
-// Таблица сессий
-export const sessions = createTable("session", {
-  id: varchar("id", { length: 255 }).primaryKey(),
-  token: text("token").notNull().unique(),
-  ipAddress: varchar("ip_address", { length: 255 }),
-  userAgent: varchar("user_agent", { length: 255 }),
-  userId: varchar("user_id", { length: 255 })
-    .notNull()
-    .references(() => users.id),
-  expiresAt: timestamp("expires_at").notNull(),
-  createdAt: timestamp("created_at")
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updated_at")
-    .$onUpdateFn(() => new Date())
-    .notNull()
-})
-
-// Таблица верификации
 export const verification = createTable("verification", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  identifier: varchar("identifier", { length: 255 }).notNull(),
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
   value: text("value").notNull(),
-  expiresAt: timestamp("expires_at", {
-    mode: "date",
-    withTimezone: true
-  }).notNull(),
-  createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date())
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at"),
+  updatedAt: timestamp("updated_at")
 })
 
-// Таблица баз данных
-export const databases = createTable("database", {
-  id: varchar("id", { length: 255 })
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => createCuid())
-})
-export const materials = createTable("material", {
+export const material = createTable("material", {
   id: varchar("id", { length: 255 })
     .notNull()
     .primaryKey()
     .$defaultFn(() => createCuid()),
   title: varchar("title", { length: 255 }).notNull(),
-  description: text("description"),
+  description: text("description").notNull(),
   status: varchar("status", { length: 255, enum: STATUS }).notNull(),
   createdAt: timestamp("created_at", {
     mode: "date",
@@ -120,9 +87,16 @@ export const materials = createTable("material", {
     mode: "date",
     withTimezone: true
   }).$onUpdateFn(() => new Date()),
-  userId: varchar("user_id", { length: 255 }).notNull()
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  publishedAt: timestamp("published_at", {
+    mode: "date",
+    withTimezone: true
+  }),
+  fileUrl: varchar("file_url", { length: 255 }).notNull(),
+  author: varchar("author", { length: 255 }).notNull(),
+  fileType: varchar("file_type", { length: 255, enum: FILE_TYPE }).notNull()
 })
-export const documents = createTable("document", {
+export const document = createTable("document", {
   id: varchar("id", { length: 255 })
     .notNull()
     .primaryKey()
@@ -130,15 +104,18 @@ export const documents = createTable("document", {
   title: text("title").notNull(),
   description: text("description").notNull(),
   link: text("link").notNull(),
-  publishedAt: timestamp("published_at").notNull(),
   createdAt: timestamp("created_at", {
     mode: "date",
     withTimezone: true
-  }).default(sql`CURRENT_TIMESTAMP`),
+  })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
   updatedAt: timestamp("updated_at", {
     mode: "date",
     withTimezone: true
-  }).$onUpdateFn(() => new Date()),
+  })
+    .$onUpdateFn(() => new Date())
+    .notNull(),
   userId: varchar("user_id", { length: 255 }).notNull()
 })
 export const notifications = createTable("notification", {
@@ -148,35 +125,39 @@ export const notifications = createTable("notification", {
     .$defaultFn(() => createCuid()),
   title: text("title").notNull(),
   description: text("description").notNull(),
-  databaseId: varchar("database_id", { length: 255 })
-    .notNull()
-    .references(() => databases.id),
+
   link: text("link").notNull(),
   createdAt: timestamp("created_at", {
     mode: "date",
     withTimezone: true
-  }).default(sql`CURRENT_TIMESTAMP`)
+  })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  userId: varchar("user_id", { length: 255 }).notNull()
 })
 
-// Определение отношений
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-  documents: many(documents), // Привязка к документам
-  materials: many(materials) // Привязка к материалам
+export const userRelations = relations(user, ({ many }) => ({
+  account: many(account),
+  document: many(document),
+  material: many(material)
 }))
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.id] })
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, { fields: [account.userId], references: [user.id] })
 }))
 
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.id] })
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, { fields: [session.userId], references: [user.id] })
 }))
 
-export const materialsRelations = relations(materials, ({ one }) => ({
-  user: one(users, { fields: [materials.userId], references: [users.id] })
+export const materialRelations = relations(material, ({ one }) => ({
+  user: one(user, { fields: [material.userId], references: [user.id] })
 }))
 
-export const documentsRelations = relations(documents, ({ one }) => ({
-  user: one(users, { fields: [documents.userId], references: [users.id] })
+export const documentRelations = relations(document, ({ one }) => ({
+  user: one(user, { fields: [document.userId], references: [user.id] })
+}))
+
+export const notificationRelations = relations(notifications, ({ one }) => ({
+  user: one(user, { fields: [notifications.userId], references: [user.id] })
 }))

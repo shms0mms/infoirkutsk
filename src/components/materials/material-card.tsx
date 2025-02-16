@@ -1,6 +1,5 @@
-"use client"
-
 import { DownloadIcon } from "lucide-react"
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -38,11 +37,15 @@ export function MaterialCard({
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-            <CardDescription className="mt-2">Автор: {author}</CardDescription>
+            <CardTitle className="text-2xl font-bold overflow-hidden text-ellipsis md:max-w-[290px] max-w-[490px]">
+              {title}
+            </CardTitle>
+            <CardDescription className="mt-2  overflow-hidden text-ellipsis md:max-w-[290px] max-w-[490px]">
+              Автор: {author}
+            </CardDescription>
           </div>
           <Badge variant="secondary" className={fileTypeColors[fileType]}>
-            {fileTypeIcons[fileType]} {fileType.toUpperCase()}
+            {fileTypeIcons[fileType]} {fileType?.toUpperCase()}
           </Badge>
         </div>
       </CardHeader>
@@ -52,16 +55,15 @@ export function MaterialCard({
         <div className="mt-4">
           <p className="text-sm text-gray-500">Предмет: Информатика</p>
           <p className="text-sm text-gray-500">
-            Опубликовано: {new Date(publishedAt).toLocaleString("ru-RU")}
+            Опубликовано: {new Date(publishedAt!).toLocaleString("ru-RU")}
           </p>
         </div>
       </CardContent>
       <CardFooter>
-        <Button
-          className="w-full"
-          onClick={() => window.open(fileUrl, "_blank")}
-        >
-          <DownloadIcon className="mr-2 h-4 w-4" /> Скачать материал
+        <Button asChild className="w-full">
+          <Link href={fileUrl} target="_blank">
+            <DownloadIcon className="mr-2 h-4 w-4" /> Скачать материал
+          </Link>
         </Button>
       </CardFooter>
     </Card>
