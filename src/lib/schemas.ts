@@ -61,9 +61,16 @@ const createDocumentSchema = z.object({
   publishedAt: z.date(),
   userId: z.string()
 })
+
+const filtersSchema = z.object({
+  titleTerm: z.string().optional(),
+  descriptionTerm: z.string().optional(),
+  publishedAtFrom: z.string().optional(),
+  publishedAtTo: z.string().optional()
+})
 type DocumentSchema = z.infer<typeof documentSchema>
 type CreateDocumentSchema = z.infer<typeof createDocumentSchema>
-
+type FiltersSchema = z.infer<typeof filtersSchema>
 const sortBy = ["publishedAt", "createdAt"] as const
 const sortByWithLabel = [
   {
@@ -90,6 +97,7 @@ export {
   type CreateDocumentSchema,
   type CreateMaterialSchema,
   type DocumentSchema,
+  type FiltersSchema,
   type MaterialSchema,
   type NotificationSchema,
   type SettingsSchema

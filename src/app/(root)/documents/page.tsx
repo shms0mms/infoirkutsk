@@ -1,13 +1,13 @@
 import { Pagination } from "@/components/ui/pagination"
 import { DocumentCard } from "@/components/documents/document-card"
 import { FilterPanel } from "./filter-panel"
-import { DocumentSchema } from "@/lib/schemas"
+import { DocumentSchema, FiltersSchema } from "@/lib/schemas"
 import { api } from "@/trpc/server"
 
 export default async function DocumentsPage({
   searchParams
 }: {
-  searchParams: Promise<{ page: string }>
+  searchParams: Promise<{ page: string } & FiltersSchema>
 }) {
   const { page, ...filters } = await searchParams
   const pageQuery = page ? (isNaN(+page) ? 1 : +page) : 1
@@ -26,7 +26,7 @@ export default async function DocumentsPage({
         <aside className="w-full md:w-1/4">
           <div className="sticky top-4">
             <h3 className="text-lg font-semibold mb-4">Фильтры</h3>
-            <FilterPanel />
+            <FilterPanel initialFilters={filters} />
           </div>
         </aside>
         <main className="w-full md:w-3/4">
@@ -41,7 +41,10 @@ export default async function DocumentsPage({
               </p>
             )}
           </div>
-          <Pagination currentPage={pageQuery} totalPages={count / limit} />
+          <Pagination
+            currentPage={pageQuery}
+            totalPages={documents.length ? count / limit : 0}
+          />
         </main>
       </div>
     </div>
