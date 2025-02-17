@@ -144,6 +144,7 @@
     "tailwindcss-animate": "^1.0.7",
     "three": "^0.168.0",
     "three-globe": "^2.41.4",
+    "twilio": "^5.4.4",
     "uploadthing": "^7.4.4",
     "use-file-picker": "^2.1.2",
     "vaul": "^0.9.9",

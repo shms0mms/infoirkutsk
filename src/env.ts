@@ -23,7 +23,10 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     // Uploadthing
-    UPLOADTHING_TOKEN: z.string()
+    UPLOADTHING_TOKEN: z.string(),
+    // Twilio
+    TWILIO_ACCOUNT_SID: z.string(),
+    TWILIO_AUTH_TOKEN: z.string()
   },
 
   /**
@@ -49,7 +52,10 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     // Uploadthing
     UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
-    NEXT_PUBLIC_MODERATOR_PASSWORD: process.env.NEXT_PUBLIC_MODERATOR_PASSWORD
+    NEXT_PUBLIC_MODERATOR_PASSWORD: process.env.NEXT_PUBLIC_MODERATOR_PASSWORD,
+    // Twilio
+    TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+    TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

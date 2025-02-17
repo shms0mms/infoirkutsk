@@ -27,7 +27,9 @@ export const user = createTable("user", {
   role: varchar("role", { length: 255, enum: ROLE }).notNull(),
   banned: boolean("banned"),
   banReason: text("ban_reason"),
-  banExpires: timestamp("ban_expires")
+  banExpires: timestamp("ban_expires"),
+  phoneNumber: text("phone_number"),
+  phoneNumberVerified: boolean("phone_number_verified").notNull().default(false)
 })
 
 export const session = createTable("session", {

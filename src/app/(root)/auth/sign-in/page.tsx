@@ -6,12 +6,12 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
 import { Icons } from "@/components/ui/icons"
 import { Separator } from "@/components/ui/separator"
+import { SignInForm } from "./sign-in-form"
 import { signIn } from "@/lib/auth"
 
 export default function SignInPage() {
@@ -44,6 +44,7 @@ export default function SignInPage() {
           </CardHeader>
           <CardContent className="space-y-2">
             <Separator className="mx-auto w-4" />
+            <SignInForm />
             <Button
               variant="outline"
               className="w-full"
@@ -54,11 +55,6 @@ export default function SignInPage() {
             </Button>
             <Separator className="mx-auto w-4" />
           </CardContent>
-          <CardFooter>
-            <p className="text-center text-sm font-thin">
-              Сделано с любовью от команды WinCode
-            </p>
-          </CardFooter>
         </Card>
       </div>
       <div className="hidden bg-muted lg:block">
