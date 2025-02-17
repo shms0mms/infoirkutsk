@@ -1,3 +1,3 @@
 export function SignInForm() {
-  return
+  return <></>
 }
