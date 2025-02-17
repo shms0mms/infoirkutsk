@@ -63,23 +63,6 @@ export const materialRouter = createTRPCRouter({
       })
     }),
 
-  create: protectedProcedure
-    .input(createMaterialSchema)
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.insert(material).values({
-        ...input,
-        userId: ctx.session.user.id
-      })
-    }),
-  createDraft: protectedProcedure
-    .input(createMaterialSchema)
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.insert(material).values({
-        ...input,
-        userId: ctx.session.user.id,
-        status: "draft"
-      })
-    }),
   update: protectedProcedure
     .input(
       materialSchema.pick({
@@ -111,6 +94,24 @@ export const materialRouter = createTRPCRouter({
       await ctx.db.update(material).set(data).where(eq(material.id, id))
 
       return { success: true, message: "Материал успешно обновлён" }
+    }),
+
+  create: protectedProcedure
+    .input(createMaterialSchema)
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.insert(material).values({
+        ...input,
+        userId: ctx.session.user.id
+      })
+    }),
+  createDraft: protectedProcedure
+    .input(createMaterialSchema.omit({ status: true }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.insert(material).values({
+        ...input,
+        userId: ctx.session.user.id,
+        status: "draft"
+      })
     }),
 
   createRequest: protectedProcedure
@@ -156,10 +157,7 @@ export const materialRouter = createTRPCRouter({
 
       const tabFilters = {
         published: eq(material.status, "accepted"),
-        unpublished: or(
-          eq(material.status, "rejected"),
-          eq(material.status, "in-progress")
-        ),
+        unpublished: or(eq(material.status, "rejected")),
         requests: eq(material.status, "in-progress"),
         drafts: eq(material.status, "draft")
       } as const

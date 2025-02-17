@@ -27,6 +27,7 @@ export type SidebarNav = {
     title: string
     icon: LogoComponent
     isActive: boolean
+    permissions: "user" | "moderator"
   } & ({ href: string } | { action: () => void }))[]
 }
 export function useSidebarNav(): SidebarNav {
@@ -41,25 +42,29 @@ export function useSidebarNav(): SidebarNav {
         title: "Главная",
         href: "/",
         icon: Home,
-        isActive: pathname === "/"
+        isActive: pathname === "/",
+        permissions: "user"
       },
       {
         title: "Панель управления",
         href: "/dashboard",
         icon: LayoutDashboard,
-        isActive: pathname === "/dashboard"
+        isActive: pathname === "/dashboard",
+        permissions: "user"
       },
       {
         title: "Мои материалы",
         href: "/dashboard/materials",
         icon: FilesIcon,
-        isActive: pathname === "/dashboard/materials"
+        isActive: pathname === "/dashboard/materials",
+        permissions: "user"
       },
       {
         title: "Мои документы",
         href: "/dashboard/documents",
         icon: FileText,
-        isActive: pathname === "/dashboard/documents"
+        isActive: pathname === "/dashboard/documents",
+        permissions: "moderator"
       }
     ]
   }

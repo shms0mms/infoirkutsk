@@ -80,7 +80,7 @@ const createMaterialSchema = z.object({
   fileUrl: z.string().url(),
   author: z.string(),
   publishedAt: z.date().optional(),
-  status: z.enum(STATUS).optional(),
+  status: z.enum(STATUS),
   fileType: z.enum(FILE_TYPE)
 })
 const notificationSchema = z.object({

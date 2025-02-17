@@ -8,20 +8,11 @@ import { MaterialsList } from "../../../components/materials/dashboard/materials
 import { tabsNav } from "./tabs-nav"
 import { api } from "@/trpc/react"
 
-// {
-//   searchParams
-// }: {
-//   searchParams: Promise<{ tab: string }>
-// }
 export default function DashboardPage() {
-  // const { tab } = await searchParams
-  // const [materials] = await api.material.getUserMaterials({
-  //   tab
-  // })
   const searchParams = useSearchParams()
   const tab = searchParams.get("tab") || "all"
 
-  const { data, isLoading } = api.material.getUserMaterials.useQuery({
+  const { data } = api.material.getUserMaterials.useQuery({
     tab
   })
   const materials = data?.[0]!
@@ -35,7 +26,7 @@ export default function DashboardPage() {
       <div className="my-20 flex flex-col gap-16">
         <section className="flex flex-col items-center justify-center">
           <Tabs className="w-full max-w-7xl" defaultValue={tab ?? "all"}>
-            <TabsList className="w-full">
+            <TabsList className="w-full mb-5">
               {tabsNav.map(t => (
                 <TabsTrigger
                   asChild
@@ -48,19 +39,19 @@ export default function DashboardPage() {
               ))}
             </TabsList>
             <TabsContent value="all">
-              <MaterialsList materials={materials} />
+              <MaterialsList tab={tab} materials={materials} />
             </TabsContent>
             <TabsContent value="published">
-              <MaterialsList materials={materials} />
+              <MaterialsList tab={tab} materials={materials} />
             </TabsContent>
             <TabsContent value="unpublished">
-              <MaterialsList materials={materials} />
+              <MaterialsList tab={tab} materials={materials} />
             </TabsContent>
             <TabsContent value="requests">
-              <MaterialsList materials={materials} />
+              <MaterialsList tab={tab} materials={materials} />
             </TabsContent>
             <TabsContent value="drafts">
-              <MaterialsList materials={materials} />
+              <MaterialsList tab={tab} materials={materials} />
             </TabsContent>
           </Tabs>
         </section>
