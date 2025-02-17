@@ -2,8 +2,9 @@
 
 import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
+import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Input } from "@/components/ui/input"
@@ -22,7 +23,9 @@ export function FilterPanel({
   initialFilters: FiltersSchema
 }) {
   const [filters, setFilters] = useState(initialFilters)
-
+  useEffect(() => {
+    setFilters(initialFilters)
+  }, [initialFilters])
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFilters(prev => ({ ...prev, [name]: value }))
@@ -30,7 +33,7 @@ export function FilterPanel({
 
   const handleDateChange = (
     date: string | undefined,
-    type: "publishedAtFrom" | "publishedAtFrom"
+    type: "publishedAtFrom" | "publishedAtTo"
   ) => {
     setFilters(prev => ({ ...prev, [type]: date }))
   }
@@ -96,7 +99,9 @@ export function FilterPanel({
             <Calendar
               mode="single"
               selected={new Date(filters.publishedAtFrom!)}
-              onSelect={date => handleDateChange(date, "publishedAtFrom")}
+              onSelect={date =>
+                handleDateChange(date?.toString(), "publishedAtFrom")
+              }
               initialFocus
             />
           </PopoverContent>
@@ -125,7 +130,9 @@ export function FilterPanel({
             <Calendar
               mode="single"
               selected={new Date(filters.publishedAtTo!)}
-              onSelect={date => handleDateChange(date, "publishedAtTo")}
+              onSelect={date =>
+                handleDateChange(date?.toString(), "publishedAtTo")
+              }
               initialFocus
             />
           </PopoverContent>
@@ -133,6 +140,9 @@ export function FilterPanel({
       </div>
       <Button type="submit" className="w-full">
         Применить фильтры
+      </Button>
+      <Button asChild variant={"outline"} className="w-full">
+        <Link href={`/documents?page=${pageQuery}`}>Сбросить фильтры</Link>
       </Button>
     </form>
   )

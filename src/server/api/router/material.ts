@@ -1,7 +1,7 @@
-import { asc, count, eq } from "drizzle-orm"
+import { and, asc, count, eq, or } from "drizzle-orm"
 import { z } from "zod"
 import { isCuid } from "@/lib/utils"
-import { createMaterialSchema } from "@/lib/schemas"
+import { createMaterialSchema, materialSchema } from "@/lib/schemas"
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -25,14 +25,16 @@ export const materialRouter = createTRPCRouter({
         })
         .from(material)
         .then(result => result[0]!.count)
+
       return await Promise.all([
         ctx.db.query.material.findMany({
           limit,
-          offset: input.page * input.page - 1
+          offset: input.page * limit
         }),
         countQuery
       ])
     }),
+
   getLast: publicProcedure
     .input(
       z.object({
@@ -46,6 +48,7 @@ export const materialRouter = createTRPCRouter({
         orderBy: [asc(material.publishedAt)]
       })
     }),
+
   getById: publicProcedure
     .input(
       z.object({
@@ -59,14 +62,145 @@ export const materialRouter = createTRPCRouter({
         where: eq(material.id, input.id)
       })
     }),
+
   create: protectedProcedure
     .input(createMaterialSchema)
     .mutation(async ({ ctx, input }) => {
-      const result = await ctx.db.insert(material).values({
+      return await ctx.db.insert(material).values({
         ...input,
         userId: ctx.session.user.id
       })
+    }),
+  createDraft: protectedProcedure
+    .input(createMaterialSchema)
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.insert(material).values({
+        ...input,
+        userId: ctx.session.user.id,
+        status: "draft"
+      })
+    }),
+  update: protectedProcedure
+    .input(
+      materialSchema.pick({
+        title: true,
+        description: true,
+        fileType: true,
+        fileUrl: true,
+        author: true,
+        status: true,
+        publishedAt: true,
+        id: true
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input
 
-      return result
+      const existingMaterial = await ctx.db.query.material.findFirst({
+        where: eq(material.id, id)
+      })
+
+      if (!existingMaterial) {
+        throw new Error("Материал не найден")
+      }
+
+      if (existingMaterial.userId !== ctx.session.user.id) {
+        throw new Error("У вас нет прав для редактирования этого материала")
+      }
+
+      await ctx.db.update(material).set(data).where(eq(material.id, id))
+
+      return { success: true, message: "Материал успешно обновлён" }
+    }),
+
+  createRequest: protectedProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input
+
+      const existingMaterial = await ctx.db.query.material.findFirst({
+        where: eq(material.id, id)
+      })
+
+      if (!existingMaterial) {
+        throw new Error("Материал не найден")
+      }
+
+      if (existingMaterial.userId !== ctx.session.user.id) {
+        throw new Error("У вас нет прав для изменения этого материала")
+      }
+
+      await ctx.db
+        .update(material)
+        .set({ status: "in-progress" })
+        .where(eq(material.id, id))
+
+      return {
+        success: true,
+        message: "Статус материала изменён на 'in-progress'"
+      }
+    }),
+
+  getUserMaterials: protectedProcedure
+    .input(
+      z.object({
+        tab: z.string().default("all")
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { tab } = input
+
+      const tabFilters = {
+        published: eq(material.status, "accepted"),
+        unpublished: or(
+          eq(material.status, "rejected"),
+          eq(material.status, "in-progress")
+        ),
+        requests: eq(material.status, "in-progress"),
+        drafts: eq(material.status, "draft")
+      } as const
+
+      const whereCondition =
+        tab === "all"
+          ? eq(material.userId, ctx.session.user.id)
+          : and(
+              eq(material.userId, ctx.session.user.id),
+              tabFilters[tab as keyof typeof tabFilters]
+            )
+
+      const materials = ctx.db.query.material.findMany({
+        where: whereCondition
+      })
+
+      return await Promise.all([materials])
+    }),
+  deleteMaterial: protectedProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input
+
+      const existingMaterial = await ctx.db.query.material.findFirst({
+        where: eq(material.id, id)
+      })
+
+      if (!existingMaterial) {
+        throw new Error("Материал не найден")
+      }
+
+      if (existingMaterial.userId !== ctx.session.user.id) {
+        throw new Error("У вас нет прав для удаления этого материала")
+      }
+
+      await ctx.db.delete(material).where(eq(material.id, id))
+
+      return { success: true, message: "Материал успешно удален" }
     })
 })

@@ -20,18 +20,6 @@ export function MaterialCard({
   author,
   publishedAt
 }: MaterialSchema) {
-  const fileTypeIcons = {
-    excel: "📊",
-    word: "📝",
-    pdf: "📄"
-  }
-
-  const fileTypeColors = {
-    excel: "bg-green-100 text-green-800",
-    word: "bg-blue-100 text-blue-800",
-    pdf: "bg-red-100 text-red-800"
-  }
-
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
@@ -44,8 +32,8 @@ export function MaterialCard({
               Автор: {author}
             </CardDescription>
           </div>
-          <Badge variant="secondary" className={fileTypeColors[fileType]}>
-            {fileTypeIcons[fileType]} {fileType?.toUpperCase()}
+          <Badge variant="secondary" className={"bg-blue-100 text-blue-800"}>
+            📄 {fileType?.toUpperCase()}
           </Badge>
         </div>
       </CardHeader>
@@ -61,7 +49,7 @@ export function MaterialCard({
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link href={fileUrl} target="_blank">
+          <Link href={fileUrl} download target="_blank">
             <DownloadIcon className="mr-2 h-4 w-4" /> Скачать материал
           </Link>
         </Button>

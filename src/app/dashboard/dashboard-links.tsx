@@ -1,3 +1,5 @@
+"use client"
+
 import { Bell, FileTextIcon, FolderIcon, GitPullRequest } from "lucide-react"
 import Link from "next/link"
 import {
@@ -6,6 +8,7 @@ import {
   CardHeader,
   CardTitle
 } from "@/components/ui/card"
+import { useSession } from "@/lib/auth"
 
 export function DashboardLink({
   href,
@@ -34,27 +37,32 @@ export function DashboardLink({
 }
 
 export function DashboardLinks() {
+  const { data } = useSession()
+  const role = data?.user.role
   return (
     <div className="flex flex-col space-y-4 w-full max-w-7xl">
-      <DashboardLink
-        href="/dashboard/documents"
-        title="Документы"
-        desc="Ваши документы"
-        icon={<FileTextIcon size={24} className="text-blue-500" />}
-      />
+      {role === "moderator" && (
+        <>
+          <DashboardLink
+            href="/dashboard/documents"
+            title="Документы"
+            desc="Ваши документы"
+            icon={<FileTextIcon size={24} className="text-blue-500" />}
+          />
+          <DashboardLink
+            href="/dashboard/requests"
+            title="Заявки на публикацию"
+            desc="Вы, как модератор, одобряете/отклоняете публикацию той или иной заявки на публикацию"
+            icon={<GitPullRequest size={24} className="text-blue-500" />}
+          />
+        </>
+      )}
 
       <DashboardLink
         href="/dashboard/materials"
         title="Материалы"
         desc="Методические разработки и учебные материалы"
         icon={<FolderIcon size={24} className="text-blue-500" />}
-      />
-
-      <DashboardLink
-        href="/dashboard/requests"
-        title="Заявки на публикацию"
-        desc="Вы, как модератор, одобряете/отклоняете публикацию той или иной заявки на публикацию"
-        icon={<GitPullRequest size={24} className="text-blue-500" />}
       />
 
       <DashboardLink

@@ -7,7 +7,7 @@ import {
   timestamp,
   varchar
 } from "drizzle-orm/pg-core"
-import { FILE_TYPE, STATUS } from "@/lib/schemas"
+import { FILE_TYPE, ROLE, STATUS } from "@/lib/schemas"
 
 export const createCuid = init({
   fingerprint: "infoirkutsk",
@@ -24,7 +24,7 @@ export const user = createTable("user", {
   image: text("image"),
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
-  role: varchar("role", { length: 255, enum: STATUS }).notNull(),
+  role: varchar("role", { length: 255, enum: ROLE }).notNull(),
   banned: boolean("banned"),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires")

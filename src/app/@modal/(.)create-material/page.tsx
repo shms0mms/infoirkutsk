@@ -1,10 +1,13 @@
 import { Modal } from "@/components/modal"
+import CreateMaterialForm from "./create-material-form"
 
 export default function CreateProjectPage() {
   return (
     <Modal
-      title="Create new project"
-      description="Workspace where you can manage your tasks with ease."
-    ></Modal>
+      title="Создать материал"
+      description="Создайте материал и поделитесь им с другими участниками"
+    >
+      <CreateMaterialForm />
+    </Modal>
   )
 }

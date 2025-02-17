@@ -30,17 +30,17 @@ export default async function DocumentsPage({
           </div>
         </aside>
         <main className="w-full md:w-3/4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
-            {documents?.length ? (
-              documents.map((document: DocumentSchema) => (
+          {documents?.length ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+              {documents.map((document: DocumentSchema) => (
                 <DocumentCard key={document.id} {...document} />
-              ))
-            ) : (
-              <p className="text-center text-xl text-gray-500">
-                Документы не найдены
-              </p>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-xl text-gray-500">
+              Документы не найдены
+            </p>
+          )}
           <Pagination
             currentPage={pageQuery}
             totalPages={documents.length ? count / limit : 0}

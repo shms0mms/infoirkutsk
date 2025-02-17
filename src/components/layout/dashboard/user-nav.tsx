@@ -1,6 +1,6 @@
 "use client"
 
-import { LayoutGrid, LogIn, LogOut, Settings } from "lucide-react"
+import { LayoutGrid, LogIn, LogOut } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -100,12 +100,7 @@ export function UserNav({ className }: UserNavProps) {
               Панель управления
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem className="hover:cursor-pointer" asChild>
-            <Link href="/settings" className="flex items-center">
-              <Settings className="mr-3 h-4 w-4 text-muted-foreground" />
-              Настройки
-            </Link>
-          </DropdownMenuItem>
+
           <DropdownMenuItem asChild>
             <ThemeToggle expanded />
           </DropdownMenuItem>

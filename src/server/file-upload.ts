@@ -3,6 +3,7 @@ import {
   createUploadthing
 } from "uploadthing/next"
 import { UTApi, UploadThingError } from "uploadthing/server"
+import { FILE_TYPE } from "@/lib/schemas"
 import { auth } from "@/server/auth"
 
 const f = createUploadthing()
@@ -23,7 +24,8 @@ export const fileRouter = {
     .onUploadComplete(() => {
       return
     }),
-  editorUploader: f(["image", "text", "blob", "pdf", "video", "audio"])
+  //@ts-expect-error asd
+  editorUploader: f([...FILE_TYPE])
     .middleware(() => {
       return {}
     })

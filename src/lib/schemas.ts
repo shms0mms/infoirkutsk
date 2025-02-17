@@ -7,10 +7,59 @@ const settingsSchema = z.object({
 })
 type SettingsSchema = z.infer<typeof settingsSchema>
 
-const FILE_TYPE = ["excel", "word", "pdf"] as const
-const STATUS = ["accepted", "in-progress", "rejected"] as const
-const ROLE = ["user", "moderator"] as const
+const FILE_TYPE = [
+  // Изображения
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+  "image/avif",
+  "image/bmp",
+  "image/tiff",
+  "image/x-icon",
 
+  // Видео
+  "video/mp4",
+  "video/mpeg",
+  "video/ogg",
+  "video/webm",
+  "video/3gpp",
+  "video/3gpp2",
+
+  // Аудио
+  "audio/mpeg",
+  "audio/wav",
+  "audio/ogg",
+  "audio/aac",
+  "audio/webm",
+  "audio/flac",
+
+  // Документы
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "text/plain",
+  "application/rtf",
+
+  // Архивы
+  "application/zip",
+  "application/x-tar",
+  "application/gzip",
+  "application/x-7z-compressed",
+  "application/x-rar-compressed"
+] as const
+
+const ROLE = ["user", "moderator"] as const
+const MATERIALS_TAB_TYPE = [
+  ["all", "published", "unpublished", "requests", "drafts"]
+] as const
+
+const STATUS = ["accepted", "in-progress", "rejected", "draft"] as const
 const materialSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -30,8 +79,8 @@ const createMaterialSchema = z.object({
   description: z.string(),
   fileUrl: z.string().url(),
   author: z.string(),
-  publishedAt: z.date(),
-  status: z.enum(STATUS),
+  publishedAt: z.date().optional(),
+  status: z.enum(STATUS).optional(),
   fileType: z.enum(FILE_TYPE)
 })
 const notificationSchema = z.object({
@@ -71,6 +120,8 @@ const filtersSchema = z.object({
 type DocumentSchema = z.infer<typeof documentSchema>
 type CreateDocumentSchema = z.infer<typeof createDocumentSchema>
 type FiltersSchema = z.infer<typeof filtersSchema>
+type MaterialsTabType = (typeof MATERIALS_TAB_TYPE)[number]
+type FileType = (typeof FILE_TYPE)[number]
 const sortBy = ["publishedAt", "createdAt"] as const
 const sortByWithLabel = [
   {
@@ -88,6 +139,8 @@ const order = ["asc", "desc"] as const
 export {
   createMaterialSchema,
   FILE_TYPE,
+  MATERIALS_TAB_TYPE,
+  materialSchema,
   order,
   ROLE,
   settingsSchema,
@@ -97,8 +150,10 @@ export {
   type CreateDocumentSchema,
   type CreateMaterialSchema,
   type DocumentSchema,
+  type FileType,
   type FiltersSchema,
   type MaterialSchema,
+  type MaterialsTabType,
   type NotificationSchema,
   type SettingsSchema
 }

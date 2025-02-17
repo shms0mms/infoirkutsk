@@ -1,21 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card"
+import CreateMaterialForm from "@/app/@modal/(.)create-material/create-material-form"
 
-export default function CreateProjectPage() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create new project</CardTitle>
-        <CardDescription>
-          Workspace where you can manage your tasks with ease.
-        </CardDescription>
-      </CardHeader>
-      <CardContent></CardContent>
-    </Card>
-  )
+export default function CreateMaterial() {
+  return <CreateMaterialForm />
 }

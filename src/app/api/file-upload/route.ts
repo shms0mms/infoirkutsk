@@ -1,9 +1,11 @@
 import { env } from "@/env"
+import { FileType } from "@/lib/schemas"
 import { auth } from "@/server/auth"
 import { utapi } from "@/server/file-upload"
 
 export type FileUploadResponse = {
   file: string
+  type: FileType
 }
 
 export const POST = async (request: Request) => {
@@ -34,7 +36,8 @@ export const POST = async (request: Request) => {
 
     return Response.json(
       {
-        file: response.data?.url
+        file: response.data?.url,
+        type: response.data?.type as FileType
       } satisfies FileUploadResponse,
       {
         headers: {
