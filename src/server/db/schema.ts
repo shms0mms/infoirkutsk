@@ -98,6 +98,27 @@ export const material = createTable("material", {
   author: varchar("author", { length: 255 }).notNull(),
   fileType: varchar("file_type", { length: 255, enum: FILE_TYPE }).notNull()
 })
+
+export const comment = createTable("comment", {
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => createCuid()),
+
+  materialId: varchar("material_id", { length: 255 })
+    .notNull()
+    .references(() => material.id, { onDelete: "cascade" }),
+
+  fromUserId: varchar("from_user_id", { length: 255 }).notNull(),
+  toUserId: varchar("to_user_id", { length: 255 }).notNull(),
+  content: text("content").notNull(),
+
+  createdAt: timestamp("created_at", {
+    mode: "date",
+    withTimezone: true
+  }).default(sql`CURRENT_TIMESTAMP`)
+})
+
 export const document = createTable("document", {
   id: varchar("id", { length: 255 })
     .notNull()

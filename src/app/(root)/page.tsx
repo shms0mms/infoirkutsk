@@ -5,30 +5,17 @@ import { Button } from "@/components/ui/button"
 import { Beam } from "@/components/ui/grid-beam"
 import { Spotlight } from "@/components/ui/spotlight"
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
+import { Footer } from "@/components/layout/home/footer"
 import { DocumentCard } from "@/components/documents/document-card"
 import { MaterialCard } from "@/components/materials/material-card"
 import { siteConfig } from "@/config"
-import { MaterialSchema } from "@/lib/schemas"
+import { api } from "@/trpc/server"
 
-export default function Home() {
-  const exampleMaterial: MaterialSchema = {
-    title: "Интерактивные уроки по алгоритмизации",
-    description:
-      "Этот материал содержит серию интерактивных уроков, направленных на обучение основам алгоритмизации. Включает в себя презентации, практические задания и тесты для закрепления материала.",
-    fileType: "pdf",
-    fileUrl: "/path/to/your/file.pdf",
-    author: "Иванов Иван Иванович",
-    publishedAt: new Date("2023-06-15T14:30:00Z"),
-    status: "accepted"
-  }
-  const exampleDocument = {
-    title: "Приказ о проведении итоговой аттестации по информатике",
-    description:
-      "Этот документ содержит информацию о порядке проведения итоговой аттестации по информатике в текущем учебном году, включая даты проведения экзаменов, требования к оборудованию и программному обеспечению, а также критерии оценивания.",
-    link: "https://example.com/documents/order-final-exam-informatics.pdf",
-    publishedAt: "2023-05-20T10:00:00Z"
-  }
-
+export default async function Home() {
+  const [[materials], [documents]] = await Promise.all([
+    api.material.getLast({ page: 1 }),
+    api.document.getLast({ page: 1 })
+  ])
   return (
     <div className="min-h-[calc(100vh-var(--dashboard-header-size))]) overflow-x-hidden relative rounded dark:bg-grid-white/[0.02]">
       <Spotlight />
@@ -63,10 +50,9 @@ export default function Home() {
           Последние опубликованные материалы
         </h2>
         <div className="grid grid-cols-2 gap-10">
-          <MaterialCard {...exampleMaterial} />
-          <MaterialCard {...exampleMaterial} />
-          <MaterialCard {...exampleMaterial} />
-          <MaterialCard {...exampleMaterial} />
+          {materials?.map(material => (
+            <MaterialCard {...material} key={material.id} />
+          ))}
         </div>
       </section>
 
@@ -75,12 +61,12 @@ export default function Home() {
           Последние документы
         </h2>
         <div className="grid grid-cols-2 gap-10">
-          <DocumentCard {...exampleDocument} />
-          <DocumentCard {...exampleDocument} />
-          <DocumentCard {...exampleDocument} />
-          <DocumentCard {...exampleDocument} />
+          {documents?.map(document => (
+            <DocumentCard key={document.id} {...document} />
+          ))}
         </div>
       </section>
+      <Footer />
     </div>
   )
 }

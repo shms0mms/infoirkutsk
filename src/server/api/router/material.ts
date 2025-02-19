@@ -1,6 +1,5 @@
 import { and, asc, count, eq, or } from "drizzle-orm"
 import { z } from "zod"
-import { isCuid } from "@/lib/utils"
 import { createMaterialSchema, materialSchema } from "@/lib/schemas"
 import {
   createTRPCRouter,
@@ -42,11 +41,13 @@ export const materialRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx }) => {
-      return ctx.db.query.material.findMany({
-        where: eq(material.status, "accepted"),
-        limit: 10,
-        orderBy: [asc(material.publishedAt)]
-      })
+      return await Promise.all([
+        ctx.db.query.material.findMany({
+          where: eq(material.status, "accepted"),
+          limit: 10,
+          orderBy: [asc(material.publishedAt)]
+        })
+      ])
     }),
 
   getById: publicProcedure
@@ -56,8 +57,6 @@ export const materialRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      if (!isCuid(input.id)) return undefined
-
       return await ctx.db.query.material.findFirst({
         where: eq(material.id, input.id)
       })

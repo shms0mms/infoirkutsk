@@ -1,4 +1,4 @@
-import { and, between, count, gte, like, lte } from "drizzle-orm"
+import { and, asc, between, count, gte, like, lte } from "drizzle-orm"
 import { z } from "zod"
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
 import { document } from "@/server/db/schema"
@@ -70,5 +70,19 @@ export const documentRouter = createTRPCRouter({
         .limit(limit)
         .offset(input.page * input.limit)
       return Promise.all([documentsQuery, countQuery])
+    }),
+  getLast: publicProcedure
+    .input(
+      z.object({
+        page: z.number().transform(page => page - 1)
+      })
+    )
+    .query(async ({ ctx }) => {
+      return await Promise.all([
+        ctx.db.query.document.findMany({
+          limit: 10,
+          orderBy: [asc(document.createdAt)]
+        })
+      ])
     })
 })
