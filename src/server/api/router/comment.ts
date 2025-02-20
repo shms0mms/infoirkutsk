@@ -1,34 +1,29 @@
 import { eq } from "drizzle-orm"
 import { z } from "zod"
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc"
-import { notifications } from "@/server/db/schema"
+import { createCommentSchema } from "@/lib/schemas"
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure
+} from "@/server/api/trpc"
+import { comment } from "@/server/db/schema"
 
-export const notificationsRouter = createTRPCRouter({
-  getUserNotifications: protectedProcedure.query(async ({ ctx }) => {
-    return await ctx.db.query.notifications.findMany({
-      where: eq(notifications.userId, ctx.session.user.id)
-    })
-  }),
+export const commentRouter = createTRPCRouter({
   create: protectedProcedure
-    .input(
-      z.object({
-        title: z.string(),
-        description: z.string(),
-        link: z.string().url(),
-        userId: z.string()
-      })
-    )
+    .input(createCommentSchema)
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.insert(notifications).values(input)
+      return await ctx.db.insert(comment).values(input)
     }),
 
-  delete: protectedProcedure
+  getComments: publicProcedure
     .input(
       z.object({
-        id: z.string()
+        materialId: z.string()
       })
     )
-    .mutation(async ({ ctx, input }) => {
-      await ctx.db.delete(notifications).where(eq(notifications.id, input.id))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.query.comment.findMany({
+        where: eq(comment.materialId, input.materialId)
+      })
     })
 })

@@ -73,7 +73,6 @@ const materialSchema = z.object({
   userId: z.string(),
   publishedAt: z.date().nullable()
 })
-
 const createMaterialSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -110,6 +109,12 @@ const createDocumentSchema = z.object({
   publishedAt: z.date(),
   userId: z.string()
 })
+const createCommentSchema = z.object({
+  content: z.string({ required_error: "Это поле обязательно" }),
+  materialId: z.string(),
+  fromUserId: z.string(),
+  toUserId: z.string()
+})
 
 const filtersSchema = z.object({
   titleTerm: z.string().optional(),
@@ -120,6 +125,7 @@ const filtersSchema = z.object({
 type DocumentSchema = z.infer<typeof documentSchema>
 type CreateDocumentSchema = z.infer<typeof createDocumentSchema>
 type FiltersSchema = z.infer<typeof filtersSchema>
+type CreateCommentSchema = z.infer<typeof createCommentSchema>
 type MaterialsTabType = (typeof MATERIALS_TAB_TYPE)[number]
 type FileType = (typeof FILE_TYPE)[number]
 const sortBy = ["publishedAt", "createdAt"] as const
@@ -137,6 +143,7 @@ const sortByWithLabel = [
 const order = ["asc", "desc"] as const
 
 export {
+  createCommentSchema,
   createMaterialSchema,
   FILE_TYPE,
   MATERIALS_TAB_TYPE,
@@ -147,6 +154,7 @@ export {
   sortBy,
   sortByWithLabel,
   STATUS,
+  type CreateCommentSchema,
   type CreateDocumentSchema,
   type CreateMaterialSchema,
   type DocumentSchema,

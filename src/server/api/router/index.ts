@@ -1,3 +1,4 @@
+import { commentRouter } from "./comment"
 import { documentRouter } from "./document"
 import { materialRouter } from "./material"
 import { notificationsRouter } from "./notification"
@@ -5,5 +6,6 @@ import { notificationsRouter } from "./notification"
 export const router = {
   material: materialRouter,
   document: documentRouter,
-  notifications: notificationsRouter
+  notifications: notificationsRouter,
+  comment: commentRouter
 }
