@@ -30,11 +30,13 @@ export function CommentForm({ material }: { material: MaterialSchema }) {
   })
 
   const { data } = useSession()
-
+  const utils = api.useUtils()
   const { mutate } = api.comment.create.useMutation({
     onSuccess: () => {
       toast.success("Комментарий успешно отправлен")
-
+      utils.comment.getComments.invalidate({
+        materialId: material.id
+      })
       form.reset()
     },
     onError: () => {

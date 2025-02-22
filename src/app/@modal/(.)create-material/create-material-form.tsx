@@ -1,12 +1,12 @@
 "use client"
 
+import { zodResolver } from "@hookform/resolvers/zod"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { FileUpload } from "@/components/ui/file-upload"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,11 +18,25 @@ import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { useMaterial } from "@/hooks/use-material"
 import { FileUploadResponse } from "@/app/api/file-upload/route"
-import { CreateMaterialSchema, STATUS } from "@/lib/schemas"
+import {
+  createMaterialSchema,
+  CreateMaterialSchema,
+  STATUS
+} from "@/lib/schemas"
 
 type FormSchema = CreateMaterialSchema & { isDraft: boolean }
-export default function CreateMaterialForm() {
-  const form = useForm<FormSchema>()
+export function CreateMaterialForm() {
+  const form = useForm<FormSchema>({
+    resolver: zodResolver(createMaterialSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      author: "",
+      fileUrl: "",
+      isDraft: false
+    }
+  })
+
   const { create, createDraft } = useMaterial()
 
   const onSubmit: SubmitHandler<FormSchema> = async ({ isDraft, ...data }) => {
@@ -34,7 +48,6 @@ export default function CreateMaterialForm() {
       headers: {},
       body: formData
     }).then(res => res.json())) as FileUploadResponse
-    console.log(isDraft)
 
     if (isDraft)
       createDraft({
@@ -53,60 +66,60 @@ export default function CreateMaterialForm() {
         <FormField
           control={form.control}
           name="title"
-          render={({ field: { onChange } }) => (
+          render={({ field }) => (
             <FormItem>
-              <FormLabel />
+              <FormLabel>Заголовок</FormLabel>
               <FormControl>
-                <Input onChange={onChange} placeholder="Заголовок" />
+                <Input {...field} placeholder="Заголовок" />
               </FormControl>
-              <FormDescription />
-              <FormMessage />
+              <FormMessage>{form.formState.errors.title?.message}</FormMessage>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="description"
-          render={({ field: { onChange } }) => (
+          render={({ field }) => (
             <FormItem>
-              <FormLabel />
+              <FormLabel>Описание</FormLabel>
               <FormControl>
                 <Textarea
-                  onChange={onChange}
+                  {...field}
                   className="max-h-[200px]"
                   placeholder="Описание"
                 />
               </FormControl>
-              <FormDescription />
-              <FormMessage />
+              <FormMessage>
+                {form.formState.errors.description?.message}
+              </FormMessage>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="author"
-          render={({ field: { onChange } }) => (
+          render={({ field }) => (
             <FormItem>
-              <FormLabel />
+              <FormLabel>Ваше ФИО</FormLabel>
               <FormControl>
-                <Input onChange={onChange} placeholder="Ваше ФИО" />
+                <Input {...field} placeholder="Ваше ФИО" />
               </FormControl>
-              <FormDescription />
-              <FormMessage />
+              <FormMessage>{form.formState.errors.author?.message}</FormMessage>
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
           name="fileUrl"
-          render={({ field: { onChange } }) => (
+          render={({ field }) => (
             <FormItem>
-              <FormLabel />
+              <FormLabel>Файл</FormLabel>
               <FormControl>
-                <FileUpload onChange={onChange} />
+                <FileUpload onChange={field.onChange} />
               </FormControl>
-              <FormDescription />
-              <FormMessage />
+              <FormMessage>
+                {form.formState.errors.fileUrl?.message}
+              </FormMessage>
             </FormItem>
           )}
         />
@@ -115,9 +128,8 @@ export default function CreateMaterialForm() {
           name="isDraft"
           render={({ field }) => (
             <FormItem>
-              <FormLabel />
               <FormControl>
-                <div className="flex items-center space-x-2 text-xl">
+                <div className="flex items-center space-x-2 mb-2 text-xl">
                   <Switch
                     id="is-draft"
                     checked={field.value}
@@ -126,11 +138,14 @@ export default function CreateMaterialForm() {
                   <Label htmlFor="is-draft">Сделать черновиком</Label>
                 </div>
               </FormControl>
-              <FormDescription />
-              <FormMessage />
+              <FormMessage>
+                {" "}
+                {form.formState.errors.isDraft?.message}
+              </FormMessage>
             </FormItem>
           )}
         />
+
         <Button type="submit" className="w-full">
           Создать материал
         </Button>

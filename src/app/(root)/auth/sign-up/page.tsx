@@ -13,10 +13,10 @@ import {
 } from "@/components/ui/card"
 import { Icons } from "@/components/ui/icons"
 import { Separator } from "@/components/ui/separator"
-import { SignInForm } from "./sign-in-form"
+import { SignUpForm } from "./sing-up-form"
 import { signIn } from "@/lib/auth"
 
-export default function SignInPage() {
+export default function SignUpPage() {
   const searchParams = useSearchParams()
 
   const signInWith = async (provider: "google") => {
@@ -38,15 +38,14 @@ export default function SignInPage() {
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <Card className="mx-4 w-full max-w-md rounded-2xl border-0 bg-card p-6 shadow-lg md:mx-0">
           <CardHeader>
-            <CardTitle className="text-2xl font-bold">Вход</CardTitle>
+            <CardTitle className="text-2xl font-bold">Регистрация</CardTitle>
             <CardDescription className="text-muted-foreground">
-              Войдите в систему с помощью одного из следующих способов.
+              Войдите в систему с помощью одного из следующих способов
             </CardDescription>
             <Separator />
           </CardHeader>
           <CardContent className="space-y-2">
-            {" "}
-            <SignInForm />
+            <SignUpForm />
             <Separator className="mx-auto w-4" />
             <Button
               variant="outline"
@@ -61,9 +60,9 @@ export default function SignInPage() {
           <CardFooter>
             <Link
               className="text-foreground/40 text-sm text-center w-full"
-              href="/auth/sign-up"
+              href="/auth/sign-in"
             >
-              Нет аккаунта? Зарегистрируйтесь
+              Уже есть аккаунт? Войдите в систему
             </Link>
           </CardFooter>
         </Card>

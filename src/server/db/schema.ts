@@ -28,7 +28,7 @@ export const user = createTable("user", {
   banned: boolean("banned"),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
-  phoneNumber: text("phone_number"),
+  phoneNumber: text("phone_number").unique(),
   phoneNumberVerified: boolean("phone_number_verified").notNull().default(false)
 })
 

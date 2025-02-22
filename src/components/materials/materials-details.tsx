@@ -1,5 +1,4 @@
 import { DownloadIcon, FileIcon } from "lucide-react"
-import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -75,9 +74,9 @@ export function MaterialDetails({
           <span>{fileName}</span>
         </div>
         <Button asChild className="w-full">
-          <Link href={fileUrl ?? "#"} download target="_blank">
+          <a href={fileUrl ?? "#"} download target="_blank">
             <DownloadIcon className="mr-2 h-5 w-5" /> Скачать материал
-          </Link>
+          </a>
         </Button>
       </CardFooter>
     </Card>

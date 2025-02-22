@@ -1,5 +1,5 @@
 import { Modal } from "@/components/modal"
-import CreateMaterialForm from "./create-material-form"
+import { CreateMaterialForm } from "./create-material-form"
 
 export default function CreateProjectPage() {
   return (

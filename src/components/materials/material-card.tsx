@@ -22,9 +22,9 @@ export function MaterialCard({
   id
 }: MaterialSchema) {
   return (
-    <Link href={`/materials/${id}`}>
-      {" "}
-      <Card className="w-full max-w-2xl">
+    <Card className="w-full max-w-2xl">
+      <Link href={`/materials/${id}`}>
+        {" "}
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
@@ -50,14 +50,14 @@ export function MaterialCard({
             </p>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button asChild className="w-full">
-            <Link href={fileUrl} download target="_blank">
-              <DownloadIcon className="mr-2 h-4 w-4" /> Скачать материал
-            </Link>
-          </Button>
-        </CardFooter>
-      </Card>
-    </Link>
+      </Link>
+      <CardFooter>
+        <Button asChild className="w-full">
+          <a href={fileUrl} download target="_blank">
+            <DownloadIcon className="mr-2 h-4 w-4" /> Скачать материал
+          </a>
+        </Button>
+      </CardFooter>
+    </Card>
   )
 }

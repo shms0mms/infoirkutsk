@@ -2,7 +2,6 @@
 
 import { ReloadIcon } from "@radix-ui/react-icons"
 import { Download, Edit, Send, Trash } from "lucide-react"
-import Link from "next/link"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,9 +37,9 @@ export const MaterialCardActions = ({
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant={"outline"} size={"icon"} asChild>
-              <Link href={material.fileUrl} download target="_blank">
+              <a href={material.fileUrl} download target="_blank">
                 <Download size={16} />
-              </Link>
+              </a>
             </Button>
           </TooltipTrigger>
           <TooltipContent>Скачать материал</TooltipContent>
