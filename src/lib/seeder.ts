@@ -1,5 +1,7 @@
 // path to a file with schema you want to reset
 import { seed } from "drizzle-seed"
+import organizations from "@/assets/organizations.json"
+import { signUp } from "./auth"
 import { FILE_TYPE, STATUS } from "./schemas"
 import { db } from "@/server/db"
 import * as schema from "@/server/db/schema"
@@ -51,4 +53,29 @@ async function documents() {
     }
   }))
 }
-documents()
+
+async function organization() {
+  for (const organization of organizations) {
+    await db.insert(schema.organization).values({
+      name: organization.name,
+      director: organization.director,
+      address: organization.address,
+      email: organization.email,
+      phoneNumber: organization.phoneNumber,
+      id: schema.createCuid()
+    })
+  }
+}
+
+// organization()
+
+async function createModerator() {
+  await signUp.email({
+    name: "Модератор",
+    email: "wincode@gmail.com",
+    password: "cm7g2oc0q00020ckyfkubh0jg",
+    role: "moderator",
+    emailVerified: true
+  })
+}
+createModerator()

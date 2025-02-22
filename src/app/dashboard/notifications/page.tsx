@@ -1,9 +1,16 @@
+import { headers } from "next/headers"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { NotificationCard } from "@/components/notifications/notification-card"
+import { auth } from "@/server/auth"
 import { api } from "@/trpc/server"
 
 export default async function NotificationsPage() {
-  const notifications = await api.notifications.getUserNotifications()
+  const session = await auth.api.getSession({
+    headers: await headers()
+  })
+  const notifications = await api.notifications.getUserNotifications({
+    role: (session?.user?.role as "user" | "moderator") ?? "user"
+  })
   return (
     <>
       <header className="flex h-14 shrink-0 items-center gap-2">

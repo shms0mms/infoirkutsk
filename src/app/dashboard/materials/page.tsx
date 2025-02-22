@@ -12,10 +12,11 @@ export default function DashboardPage() {
   const searchParams = useSearchParams()
   const tab = searchParams.get("tab") || "all"
 
-  const { data } = api.material.getUserMaterials.useQuery({
+  const { data, isLoading } = api.material.getUserMaterials.useQuery({
     tab
   })
   const materials = data?.[0]!
+
   return (
     <>
       <header className="flex h-14 shrink-0 items-center gap-2">
@@ -23,9 +24,9 @@ export default function DashboardPage() {
           <SidebarTrigger />
         </div>
       </header>
-      <div className="my-20 flex flex-col gap-16">
-        <section className="flex flex-col items-center justify-center">
-          <Tabs className="w-full max-w-7xl" defaultValue={tab ?? "all"}>
+      <div className="my-20 flex h-full w-full flex-col gap-16">
+        <section className="flex h-full w-full flex-col items-center justify-center">
+          <Tabs className="w-full max-w-7xl h-full" defaultValue={tab ?? "all"}>
             <TabsList className="w-full mb-5">
               {tabsNav.map(t => (
                 <TabsTrigger
@@ -38,21 +39,17 @@ export default function DashboardPage() {
                 </TabsTrigger>
               ))}
             </TabsList>
-            <TabsContent value="all">
-              <MaterialsList tab={tab} materials={materials} />
-            </TabsContent>
-            <TabsContent value="published">
-              <MaterialsList tab={tab} materials={materials} />
-            </TabsContent>
-            <TabsContent value="unpublished">
-              <MaterialsList tab={tab} materials={materials} />
-            </TabsContent>
-            <TabsContent value="requests">
-              <MaterialsList tab={tab} materials={materials} />
-            </TabsContent>
-            <TabsContent value="drafts">
-              <MaterialsList tab={tab} materials={materials} />
-            </TabsContent>
+            {["all", "published", "unpublished", "requests", "drafts"].map(
+              s => (
+                <TabsContent className="w-full h-full" key={s} value={s}>
+                  <MaterialsList
+                    isLoading={isLoading}
+                    tab={tab}
+                    materials={materials}
+                  />
+                </TabsContent>
+              )
+            )}
           </Tabs>
         </section>
       </div>

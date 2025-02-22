@@ -16,21 +16,32 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
 import { signUp } from "@/lib/auth"
 import { createUserSchema, type CreateUserSchema } from "@/lib/schemas"
+import { api } from "@/trpc/react"
 
 export function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false)
-
+  const { data: organizations } = api.organization.getAll.useQuery()
   const form = useForm<CreateUserSchema>({
     resolver: zodResolver(createUserSchema),
     defaultValues: {
-      phoneNumber: "",
       name: "",
       email: "",
-      password: ""
+      password: "",
+      organizationId: ""
     }
   })
+
   const router = useRouter()
   const onSubmit = async (values: CreateUserSchema) => {
     try {
@@ -53,22 +64,6 @@ export function SignUpForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         method="post"
       >
-        <FormField
-          control={form.control}
-          name="phoneNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Номер телефона</FormLabel>
-              <FormControl>
-                <Input placeholder="+79999999999" {...field} />
-              </FormControl>
-              <FormMessage>
-                {form.formState.errors.phoneNumber?.message}
-              </FormMessage>
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="name"
@@ -100,7 +95,39 @@ export function SignUpForm() {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="organizationId"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel>Выбирите ваше учебное заведение</FormLabel>
+              <FormControl>
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите учебное заведение" />
+                  </SelectTrigger>
+                  <SelectContent className="w-full">
+                    <SelectGroup className="w-full">
+                      <SelectLabel>Учебные заведения</SelectLabel>
+                      {organizations?.map(organization => (
+                        <SelectItem
+                          value={organization.id}
+                          key={organization.id}
+                          className="max-w-[340px] text-ellipsis overflow-hidden"
+                        >
+                          {organization.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage>
+                {form.formState.errors.organizationId?.message}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="password"

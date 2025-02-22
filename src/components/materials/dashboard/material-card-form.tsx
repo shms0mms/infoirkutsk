@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSearchParams } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -14,7 +15,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useMaterial } from "@/hooks/use-material"
 import { materialSchema, MaterialSchema } from "@/lib/schemas"
 import { api } from "@/trpc/react"
 
@@ -29,12 +29,20 @@ export const MaterialCardForm = ({
     defaultValues: material,
     resolver: zodResolver(materialSchema)
   })
-
-  const { edit } = useMaterial()
+  const utils = api.useUtils()
+  const searchParams = useSearchParams()
+  const { mutate: edit } = api.material.update.useMutation({
+    onSuccess: () => {
+      utils.material.getUserMaterials.invalidate({
+        tab: searchParams.get("tab") || "all"
+      })
+      toast.success("Материал успешно изменён")
+      setIsEditing(false)
+    }
+  })
 
   const onSubmit: SubmitHandler<MaterialSchema> = (data: MaterialSchema) => {
     edit(data)
-    setIsEditing(false)
   }
   return (
     <Form {...form}>

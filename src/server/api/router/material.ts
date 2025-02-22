@@ -103,15 +103,6 @@ export const materialRouter = createTRPCRouter({
         userId: ctx.session.user.id
       })
     }),
-  createDraft: protectedProcedure
-    .input(createMaterialSchema.omit({ status: true }))
-    .mutation(async ({ ctx, input }) => {
-      return await ctx.db.insert(material).values({
-        ...input,
-        userId: ctx.session.user.id,
-        status: "draft"
-      })
-    }),
 
   createRequest: protectedProcedure
     .input(
@@ -175,7 +166,7 @@ export const materialRouter = createTRPCRouter({
 
       return await Promise.all([materials])
     }),
-  deleteMaterial: protectedProcedure
+  delete: protectedProcedure
     .input(
       z.object({
         id: z.string()

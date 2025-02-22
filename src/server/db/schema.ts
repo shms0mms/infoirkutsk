@@ -17,19 +17,31 @@ export const createCuid = init({
 export const createTable = pgTableCreator(name => `infoirkutsk_${name}`)
 
 export const user = createTable("user", {
-  id: text("id").primaryKey(),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createCuid()),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),
   image: text("image"),
-  createdAt: timestamp("created_at").notNull(),
-  updatedAt: timestamp("updated_at").notNull(),
+  createdAt: timestamp("created_at")
+    .$defaultFn(() => new Date())
+    .notNull(),
+  updatedAt: timestamp("updated_at"),
   role: varchar("role", { length: 255, enum: ROLE }).notNull(),
   banned: boolean("banned"),
   banReason: text("ban_reason"),
   banExpires: timestamp("ban_expires"),
+  organizationId: text("organization_id")
+})
+
+export const organization = createTable("organization", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  director: text("director").notNull(),
   phoneNumber: text("phone_number").unique(),
-  phoneNumberVerified: boolean("phone_number_verified").notNull().default(false)
+  address: text("address").notNull(),
+  email: text("email").notNull()
 })
 
 export const session = createTable("session", {
@@ -156,7 +168,8 @@ export const notifications = createTable("notification", {
   })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  userId: varchar("user_id", { length: 255 }).notNull()
+  userId: varchar("user_id", { length: 255 }), // айдишник пользователя, которому отправить уведомление
+  fromUser: boolean("from_user").notNull().default(false) // если стоит true, то уведомление отправляется ВСЕМ модераторам
 })
 
 export const userRelations = relations(user, ({ many }) => ({

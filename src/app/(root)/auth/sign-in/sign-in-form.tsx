@@ -1,7 +1,9 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -12,6 +14,7 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { signIn } from "@/lib/auth"
 import { SignInSchema, signInSchema } from "@/lib/schemas"
 
 export function SignInForm() {
@@ -22,8 +25,21 @@ export function SignInForm() {
       password: ""
     }
   })
+  const router = useRouter()
+  const onSubmit = async (values: SignInSchema) => {
+    try {
+      const { data, error } = await signIn.email(values)
+      console.log(error)
 
-  const onSubmit = async (values: SignInSchema) => {}
+      if (error?.code === "INVALID_EMAIL_OR_PASSWORD")
+        return toast.success("Неправильная почта или пароль!")
+
+      router.push("/")
+      toast.success("Вы успешно создали аккаунт!")
+    } catch (error) {
+      toast.error("Ошибка входа")
+    }
+  }
 
   return (
     <Form {...form}>

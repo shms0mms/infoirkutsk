@@ -2,7 +2,8 @@
 
 import { CaretSortIcon } from "@radix-ui/react-icons"
 import { type User } from "better-auth"
-import { Bell, LogOut, Send } from "lucide-react"
+import { Bell, LogOut, Send, Settings } from "lucide-react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -57,7 +58,10 @@ export function NavUser({ user }: { user: User }) {
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user?.image!} alt={user?.name!} />
+                  <AvatarImage
+                    src={user?.image ?? "/user.svg"}
+                    alt={user?.name!}
+                  />
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">{user?.name}</span>
@@ -68,13 +72,32 @@ export function NavUser({ user }: { user: User }) {
 
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Send />
-                Заявки на публикацию
+              <DropdownMenuItem
+                asChild
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <Link href="/dashboard/requests">
+                  <Send size={12} />
+                  Заявки на публикацию
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Уведомления
+              <DropdownMenuItem
+                asChild
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <Link href={`/dashboard/notifications`}>
+                  <Bell size={12} />
+                  Уведомления
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                asChild
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <Link href={`/settings`}>
+                  <Settings size={12} />
+                  Настройки
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
@@ -84,8 +107,9 @@ export function NavUser({ user }: { user: User }) {
                 toast.success(`Вы успешно вышли из системы.`)
                 router.push("/")
               }}
+              className="flex items-center gap-2 cursor-pointer"
             >
-              <LogOut />
+              <LogOut size={12} />
               Выйти
             </DropdownMenuItem>
           </DropdownMenuContent>

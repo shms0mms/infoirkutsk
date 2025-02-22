@@ -2,6 +2,8 @@
 
 import { ReloadIcon } from "@radix-ui/react-icons"
 import { Download, Edit, Send, Trash } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { toast } from "sonner"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,8 +22,8 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from "@/components/ui/tooltip"
-import { useMaterial } from "@/hooks/use-material"
 import { MaterialSchema } from "@/lib/schemas"
+import { api } from "@/trpc/react"
 
 export const MaterialCardActions = ({
   material,
@@ -30,7 +32,28 @@ export const MaterialCardActions = ({
   material: MaterialSchema
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
-  const { createRequest, deleteMaterial } = useMaterial()
+  const utils = api.useUtils()
+  const searchParams = useSearchParams()
+  const tab = searchParams.get("tab") || "all"
+  const { mutate: createRequest } = api.material.createRequest.useMutation({
+    onSuccess: () => {
+      utils.material.getUserMaterials.invalidate({
+        tab
+      })
+      toast.success("Метариал подан на заявку публикации")
+      setIsEditing(false)
+    }
+  })
+  const { mutate: remove } = api.material.delete.useMutation({
+    onSuccess: () => {
+      utils.material.getUserMaterials.invalidate({
+        tab
+      })
+      toast.success("Материал удален")
+      setIsEditing(false)
+    }
+  })
+
   return (
     <div className="flex items-center justify-end gap-2 w-full">
       <TooltipProvider>
@@ -67,9 +90,7 @@ export const MaterialCardActions = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Отмена</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => deleteMaterial({ id: material.id })}
-            >
+            <AlertDialogAction onClick={() => remove({ id: material.id })}>
               Продолжить
             </AlertDialogAction>
           </AlertDialogFooter>

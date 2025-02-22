@@ -1,7 +1,9 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useSearchParams } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { FileUpload } from "@/components/ui/file-upload"
 import {
@@ -16,48 +18,61 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { useMaterial } from "@/hooks/use-material"
 import { FileUploadResponse } from "@/app/api/file-upload/route"
 import {
-  createMaterialSchema,
-  CreateMaterialSchema,
+  createMaterialFormSchema,
+  CreateMaterialFormSchema,
   STATUS
 } from "@/lib/schemas"
+import { api } from "@/trpc/react"
 
-type FormSchema = CreateMaterialSchema & { isDraft: boolean }
+type FormSchema = CreateMaterialFormSchema & { isDraft: boolean }
 export function CreateMaterialForm() {
+  const utils = api.useUtils()
+  const searchParams = useSearchParams()
+  const { mutate: notify } = api.notifications.create.useMutation()
+
+  const { mutate: create } = api.material.create.useMutation({
+    onSuccess: () => {
+      utils.material.getUserMaterials.invalidate({
+        tab: searchParams.get("tab") || "all"
+      })
+      notify({
+        description: "Еще одна заявка на публикацию!",
+        title: "Новая заявка на публикацию",
+        link: "/dashboard/materials",
+        fromUser: true
+      })
+      toast.success("Материал успешно создан")
+    },
+    onError: error => {
+      toast.error(`Ошибка: ${error.message}`)
+    }
+  })
+
   const form = useForm<FormSchema>({
-    resolver: zodResolver(createMaterialSchema),
+    resolver: zodResolver(createMaterialFormSchema),
     defaultValues: {
       title: "",
       description: "",
       author: "",
-      fileUrl: "",
       isDraft: false
     }
   })
 
-  const { create, createDraft } = useMaterial()
-
   const onSubmit: SubmitHandler<FormSchema> = async ({ isDraft, ...data }) => {
     const formData = new FormData()
-    formData.append("file", data.fileUrl)
+    formData.append("file", data.file!)
 
-    const { file, type } = (await fetch("/api/file-upload", {
+    const { file: url, type } = (await fetch("/api/file-upload", {
       method: "POST",
       headers: {},
       body: formData
     }).then(res => res.json())) as FileUploadResponse
 
     if (isDraft)
-      createDraft({
-        ...data,
-        fileUrl: file,
-        fileType: type
-      })
-    else {
-      create({ ...data, fileUrl: file, status: STATUS[1], fileType: type })
-    }
+      create({ ...data, fileUrl: url, status: STATUS[3], fileType: type })
+    else create({ ...data, fileUrl: url, status: STATUS[1], fileType: type })
   }
 
   return (
@@ -110,16 +125,14 @@ export function CreateMaterialForm() {
         />
         <FormField
           control={form.control}
-          name="fileUrl"
+          name="file"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Файл</FormLabel>
               <FormControl>
                 <FileUpload onChange={field.onChange} />
               </FormControl>
-              <FormMessage>
-                {form.formState.errors.fileUrl?.message}
-              </FormMessage>
+              <FormMessage>{form.formState.errors.file?.message}</FormMessage>
             </FormItem>
           )}
         />
@@ -139,7 +152,6 @@ export function CreateMaterialForm() {
                 </div>
               </FormControl>
               <FormMessage>
-                {" "}
                 {form.formState.errors.isDraft?.message}
               </FormMessage>
             </FormItem>

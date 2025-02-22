@@ -25,9 +25,27 @@ export const auth = betterAuth({
     }
   },
 
-  user: {},
+  user: {
+    additionalFields: {
+      organizationId: {
+        type: "string",
+        defaultValue: null,
+        required: true,
+        input: true
+      },
+      role: {
+        type: "string",
+        defaultValue: "user",
+        required: true,
+        input: false
+      }
+    }
+  },
+
   emailAndPassword: {
     enabled: true
+
+    // requireEmailVerification: true
   },
 
   plugins: [

@@ -16,6 +16,17 @@ const order = ["asc", "desc"] as const
 
 const phoneRegex = /^\+7\d{3}\d{3}\d{2}\d{2}$/
 
+const userAdditionalFields = {
+  additionalFields: {
+    organizationId: {
+      type: "string",
+      defaultValue: null,
+      required: true,
+      input: false
+    }
+  }
+}
+
 const FILE_TYPE = [
   // Изображения
   "image/jpeg",
@@ -54,6 +65,7 @@ const FILE_TYPE = [
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   "text/plain",
   "application/rtf",
+  "application/json",
 
   // Архивы
   "application/zip",
@@ -70,8 +82,13 @@ const MATERIALS_TAB_TYPE = [
 const STATUS = ["accepted", "in-progress", "rejected", "draft"] as const
 
 const settingsSchema = z.object({
-  sidebar: z.object({
-    isOpen: z.boolean().default(false)
+  organizationId: z
+    .string({
+      required_error: "Выберите учебное заведение"
+    })
+    .min(1, "Выберите учебное заведение"),
+  name: z.string({
+    required_error: "Введите ваше ФИО"
   })
 })
 
@@ -88,22 +105,39 @@ const materialSchema = z.object({
   userId: z.string(),
   publishedAt: z.date().nullable()
 })
+const createMaterialFormSchema = z.object({
+  title: z
+    .string({
+      required_error: "Введите заголовок"
+    })
+    .min(1, "Введите заголовок"),
+  description: z
+    .string({
+      required_error: "Введите описание"
+    })
+    .min(1, "Введите описание"),
+  file: z
+    .custom<File | null>()
+    .refine(
+      file => !file || FILE_TYPE.includes(file?.type as FileType),
+      "Такой тип файла не поддерживается!"
+    )
+    .refine(file => file !== null, "Файл не выбран"),
+  author: z
+    .string({
+      required_error: "Введите ваше ФИО"
+    })
+    .min(1, "Введите ФИО"),
+  isDraft: z.boolean().default(false)
+})
 const createMaterialSchema = z.object({
-  title: z.string({
-    required_error: "Введите заголовок"
-  }),
-  description: z.string({
-    required_error: "Введите описание"
-  }),
-  fileUrl: z.string({
-    required_error: "Выберите файл"
-  }),
-  author: z.string({
-    required_error: "Введите ваше ФИО"
-  }),
+  title: z.string(),
+  description: z.string(),
+  fileUrl: z.string(),
+  author: z.string(),
   publishedAt: z.date().optional(),
-  status: z.enum(STATUS).nullable(),
-  fileType: z.enum(FILE_TYPE).nullable()
+  status: z.enum(STATUS),
+  fileType: z.enum(FILE_TYPE)
 })
 const notificationSchema = z.object({
   id: z.string(),
@@ -111,7 +145,8 @@ const notificationSchema = z.object({
   description: z.string(),
   link: z.string().url(),
   createdAt: z.date(),
-  userId: z.string()
+  userId: z.string().nullable(),
+  fromUser: z.boolean().default(false)
 })
 const commentSchema = z.object({
   content: z.string(),
@@ -180,7 +215,12 @@ const createUserSchema = z.object({
     .string({
       required_error: "Это поле обязательное"
     })
-    .min(6, "Пароль должен содержать не менее 6 символов")
+    .min(6, "Пароль должен содержать не менее 6 символов"),
+  organizationId: z
+    .string({
+      required_error: "Выберите учебное заведение"
+    })
+    .min(1, "Выберите учебное заведение")
 })
 
 type DocumentSchema = z.infer<typeof documentSchema>
@@ -196,9 +236,12 @@ type MaterialsTabType = (typeof MATERIALS_TAB_TYPE)[number]
 type FileType = (typeof FILE_TYPE)[number]
 type CreateUserSchema = z.infer<typeof createUserSchema>
 type SignInSchema = z.infer<typeof signInSchema>
+type CreateMaterialFormSchema = z.infer<typeof createMaterialFormSchema>
+
 export {
   commentSchema,
   createCommentSchema,
+  createMaterialFormSchema,
   createMaterialSchema,
   createUserSchema,
   FILE_TYPE,
@@ -212,9 +255,11 @@ export {
   sortBy,
   sortByWithLabel,
   STATUS,
+  userAdditionalFields,
   type CommentSchema,
   type CreateCommentSchema,
   type CreateDocumentSchema,
+  type CreateMaterialFormSchema,
   type CreateMaterialSchema,
   type CreateUserSchema,
   type DocumentSchema,
