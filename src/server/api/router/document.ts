@@ -1,6 +1,10 @@
-import { and, asc, between, count, gte, like, lte } from "drizzle-orm"
+import { and, asc, between, count, eq, gte, like, lte } from "drizzle-orm"
 import { z } from "zod"
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc"
+import {
+  createTRPCRouter,
+  moderatorProcedure,
+  publicProcedure
+} from "@/server/api/trpc"
 import { document } from "@/server/db/schema"
 
 export const documentRouter = createTRPCRouter({
@@ -84,5 +88,78 @@ export const documentRouter = createTRPCRouter({
           orderBy: [asc(document.createdAt)]
         })
       ])
+    }),
+  create: moderatorProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        link: z.string().url(),
+        publishedAt: z.date()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.insert(document).values({
+        ...input,
+        userId: ctx.session?.user?.id!
+      })
+    }),
+  getUserDocuments: moderatorProcedure.query(async ({ ctx }) => {
+    return await ctx.db.query.document.findMany({
+      where: eq(document.userId, ctx?.session?.user?.id!)
+    })
+  }),
+  update: moderatorProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        description: z.string(),
+        link: z.string(),
+        id: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...data } = input
+
+      const existingDocument = await ctx.db.query.document.findFirst({
+        where: eq(document.id, id)
+      })
+
+      if (!existingDocument) {
+        throw new Error("Материал не найден")
+      }
+
+      if (existingDocument.userId !== ctx?.session?.user?.id) {
+        throw new Error("У вас нет прав для редактирования этого материала")
+      }
+
+      await ctx.db.update(document).set(data).where(eq(document.id, id))
+
+      return { success: true, message: "Документ успешно обновлён" }
+    }),
+  delete: moderatorProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id } = input
+
+      const existingDocument = await ctx.db.query.document.findFirst({
+        where: eq(document.id, id)
+      })
+
+      if (!existingDocument) {
+        throw new Error("Документ не найден")
+      }
+
+      if (existingDocument.userId !== ctx?.session?.user?.id) {
+        throw new Error("У вас нет прав для удаления этого документа")
+      }
+
+      await ctx.db.delete(document).where(eq(document.id, id))
+
+      return { success: true, message: "Документ успешно удалён" }
     })
 })

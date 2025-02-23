@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -38,7 +39,12 @@ export const Settings = () => {
   })
 
   const onSubmit = (data: SettingsSchema) => {
-    authClient.updateUser(data)
+    try {
+      authClient.updateUser(data)
+      toast.success("Настройки успешно сохранены")
+    } catch (error) {
+      toast.error("Ошибка сохранения настроек")
+    }
   }
 
   return (

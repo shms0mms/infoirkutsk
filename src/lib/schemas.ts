@@ -167,11 +167,14 @@ const documentSchema = z.object({
   id: z.string()
 })
 const createDocumentSchema = z.object({
-  title: z.string(),
-  description: z.string(),
-  link: z.string().url(),
-  publishedAt: z.date(),
-  userId: z.string()
+  title: z.string().min(1, "Заголовок должен быть указан"),
+  description: z.string().min(1, "Описание должно быть указано"),
+  link: z
+    .string()
+    .url({
+      message: "Введите корректную ссылку на документ"
+    })
+    .min(1, "Ссылка должна быть указана")
 })
 const createCommentSchema = z.object({
   content: z.string({ required_error: "Это поле обязательно" }),
@@ -222,7 +225,14 @@ const createUserSchema = z.object({
     })
     .min(1, "Выберите учебное заведение")
 })
-
+const userSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string(),
+  image: z.string(),
+  role: z.enum(["user", "moderator"])
+})
+type UserSchema = z.infer<typeof userSchema>
 type DocumentSchema = z.infer<typeof documentSchema>
 type CreateDocumentSchema = z.infer<typeof createDocumentSchema>
 type FiltersSchema = z.infer<typeof filtersSchema>
@@ -241,9 +251,11 @@ type CreateMaterialFormSchema = z.infer<typeof createMaterialFormSchema>
 export {
   commentSchema,
   createCommentSchema,
+  createDocumentSchema,
   createMaterialFormSchema,
   createMaterialSchema,
   createUserSchema,
+  documentSchema,
   FILE_TYPE,
   MATERIALS_TAB_TYPE,
   materialSchema,
@@ -269,5 +281,6 @@ export {
   type MaterialsTabType,
   type NotificationSchema,
   type SettingsSchema,
-  type SignInSchema
+  type SignInSchema,
+  type UserSchema
 }

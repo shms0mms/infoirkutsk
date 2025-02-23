@@ -26,7 +26,7 @@ export default function DashboardPage() {
       </header>
       <div className="my-20 flex h-full w-full flex-col gap-16">
         <section className="flex h-full w-full flex-col items-center justify-center">
-          <Tabs className="w-full max-w-7xl h-full" defaultValue={tab ?? "all"}>
+          <Tabs className="w-full container h-full" defaultValue={tab ?? "all"}>
             <TabsList className="w-full mb-5">
               {tabsNav.map(t => (
                 <TabsTrigger

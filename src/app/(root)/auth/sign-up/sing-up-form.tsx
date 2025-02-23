@@ -46,6 +46,7 @@ export function SignUpForm() {
   const onSubmit = async (values: CreateUserSchema) => {
     try {
       const { data, error } = await signUp.email(values)
+
       if (error?.code === "USER_ALREADY_EXISTS") {
         return toast.success("Такой пользователь уже существует!")
       } else if (!data) return toast.success("Ошибка при регистрации!")

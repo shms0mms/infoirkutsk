@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { type Session } from "./server/auth"
 
 const protectedRoutes = ["/create-material", "/dashboard", "/projects"]
-
+const moderatorRoutes = ["/create-document", "/dashboard/documents"]
 export const middleware = async (request: NextRequest) => {
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
@@ -24,6 +24,10 @@ export const middleware = async (request: NextRequest) => {
 
   if (protectedRoutes.some(p => pathname.startsWith(p)) && !session) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url))
+  }
+  const isNotModerator = session?.user.role !== "moderator"
+  if (moderatorRoutes.some(p => pathname.startsWith(p)) && isNotModerator) {
+    return NextResponse.redirect(new URL("/404", request.url))
   }
 
   return NextResponse.next()

@@ -13,7 +13,7 @@ const HomeLayout: FC<PropsWithChildren<HomeLayoutProps>> = ({
       <Header />
       <div
         className={cn(
-          "[&>div]:min-h-[calc(100vh-var(--dashboard-header-size))]",
+          "[&>div]:min-h-[calc(100vh-var(--dashboard-header-size))] w-full",
           className
         )}
       >

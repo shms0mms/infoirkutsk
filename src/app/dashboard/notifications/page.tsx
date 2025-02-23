@@ -18,8 +18,8 @@ export default async function NotificationsPage() {
           <SidebarTrigger />
         </div>
       </header>
-      <div className="my-20 flex flex-col gap-16">
-        <section className="flex flex-col gap-5 w-full h-full items-center justify-center">
+      <div className="container">
+        <section className="w-full mx-auto">
           {!!notifications?.length ? (
             notifications.map(n => <NotificationCard key={n.id} {...n} />)
           ) : (

@@ -14,7 +14,9 @@ export function NavMain({ navigation }: { navigation: SidebarNav["navMain"] }) {
   return (
     <SidebarMenu>
       {navigation
-        .filter(n => data?.user.role === n.permissions)
+        .filter(n =>
+          data?.user.role === "moderator" ? n : n.permissions === "user"
+        )
         .map(item => {
           const children = (
             <>

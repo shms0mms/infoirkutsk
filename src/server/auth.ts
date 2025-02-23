@@ -50,7 +50,10 @@ export const auth = betterAuth({
 
   plugins: [
     nextCookies(),
-    admin(),
+    admin({
+      adminRole: ["moderator"],
+      defaultRole: "user"
+    }),
     phoneNumber({
       sendOTP: async ({ phoneNumber, code }, request) => {
         try {

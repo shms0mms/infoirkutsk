@@ -1,4 +1,4 @@
-import { FilesIcon, FileText, Home, LayoutDashboard } from "lucide-react"
+import { FilesIcon, FileText, Home, LayoutDashboard, Send } from "lucide-react"
 import { useParams, usePathname } from "next/navigation"
 import { type FC } from "react"
 
@@ -64,6 +64,13 @@ export function useSidebarNav(): SidebarNav {
         href: "/dashboard/documents",
         icon: FileText,
         isActive: pathname === "/dashboard/documents",
+        permissions: "moderator"
+      },
+      {
+        title: "Заявки на публикацию",
+        href: "/dashboard/requests",
+        icon: Send,
+        isActive: pathname === "/dashboard/requests",
         permissions: "moderator"
       }
     ]

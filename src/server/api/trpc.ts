@@ -133,6 +133,21 @@ export const protectedProcedure = t.procedure
     })
   })
 
+export const moderatorProcedure = t.procedure
+  .use(timingMiddleware)
+  .use(({ ctx, next }) => {
+    const isModerator = ctx.session?.user.role !== "moderator"
+    if (isModerator) {
+      throw new TRPCError({ code: "FORBIDDEN" })
+    }
+    return next({
+      ctx: {
+        // infers the `session` as non-nullable
+        session: { ...ctx.session, user: ctx.session?.user }
+      }
+    })
+  })
+
 export type ProtectedCtx = ArgumentTypes<
   ArgumentTypes<(typeof protectedProcedure)["mutation"]>["0"]
 >["0"]["ctx"]
