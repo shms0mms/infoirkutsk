@@ -1,7 +1,7 @@
 "use client"
 
 import { CaretSortIcon } from "@radix-ui/react-icons"
-import { Bell, LogOut, Send, Settings } from "lucide-react"
+import { Bell, LogOut, Settings } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
@@ -21,6 +21,7 @@ import {
   SidebarMenuItem,
   useSidebar
 } from "@/components/ui/sidebar"
+import { RequestsItemLink } from "./requests-item-link"
 import { signOut } from "@/lib/auth"
 import { UserSchema } from "@/lib/schemas"
 import { api } from "@/trpc/react"
@@ -28,9 +29,10 @@ import { api } from "@/trpc/react"
 export function NavUser({ user }: { user: UserSchema }) {
   const { isMobile } = useSidebar()
   const router = useRouter()
-  const { data } = api.notifications.getCountOfNotifications.useQuery({
-    role: user?.role
-  })
+  const { data: notificationsCount } =
+    api.notifications.getCountOfNotifications.useQuery({
+      role: user?.role
+    })
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -76,15 +78,7 @@ export function NavUser({ user }: { user: UserSchema }) {
 
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                asChild
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                <Link href="/dashboard/requests">
-                  <Send size={12} />
-                  Заявки на публикацию
-                </Link>
-              </DropdownMenuItem>
+              {user?.role === "moderator" && <RequestsItemLink />}
               <DropdownMenuItem
                 asChild
                 className="flex items-center relative gap-2 cursor-pointer"
@@ -92,9 +86,9 @@ export function NavUser({ user }: { user: UserSchema }) {
                 <Link href={`/dashboard/notifications`}>
                   <Bell size={12} />
                   Уведомления
-                  {!!data && (
+                  {!!notificationsCount && (
                     <span className="absolute right-0 top-1/2 -translate-y-1/2 px-1.5 rounded-full bg-red-500 flex items-center justify-center text-white">
-                      {data}
+                      {notificationsCount}
                     </span>
                   )}
                 </Link>

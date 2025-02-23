@@ -3,6 +3,7 @@ import { z } from "zod"
 import { createMaterialSchema, materialSchema } from "@/lib/schemas"
 import {
   createTRPCRouter,
+  moderatorProcedure,
   protectedProcedure,
   publicProcedure
 } from "@/server/api/trpc"
@@ -33,6 +34,12 @@ export const materialRouter = createTRPCRouter({
         countQuery
       ])
     }),
+
+  getRequests: moderatorProcedure.query(async ({ ctx }) => {
+    return await ctx.db.query.material.findMany({
+      where: eq(material.status, "in-progress")
+    })
+  }),
 
   getLast: publicProcedure
     .input(

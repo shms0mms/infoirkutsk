@@ -3,6 +3,7 @@ import { documentRouter } from "./document"
 import { materialRouter } from "./material"
 import { notificationsRouter } from "./notification"
 import { organizationRouter } from "./organization"
+import { requestsRouter } from "./requests"
 import { userRouter } from "./user"
 
 export const router = {
@@ -11,5 +12,6 @@ export const router = {
   notifications: notificationsRouter,
   comment: commentRouter,
   user: userRouter,
-  organization: organizationRouter
+  organization: organizationRouter,
+  requests: requestsRouter
 }

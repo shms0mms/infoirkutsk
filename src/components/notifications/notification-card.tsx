@@ -2,7 +2,8 @@
 
 import { formatDistanceToNow } from "date-fns"
 import { ru } from "date-fns/locale"
-import { ClockIcon, ExternalLinkIcon, Trash, UserIcon } from "lucide-react"
+import { ClockIcon, ExternalLinkIcon, Trash } from "lucide-react"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -21,16 +22,13 @@ export function NotificationCard({
   title,
   description,
   link,
-  createdAt,
-  userId
+  createdAt
 }: NotificationSchema) {
-  const utils = api.useUtils()
+  const router = useRouter()
   const { data: session } = useSession()
   const { mutate: remove } = api.notifications.delete.useMutation({
     onSuccess: () => {
-      utils.notifications.getUserNotifications.invalidate({
-        role: (session?.user.role as "user" | "moderator") ?? "user"
-      })
+      router.push("/dashboard/notifications")
     }
   })
   return (
@@ -57,12 +55,6 @@ export function NotificationCard({
       </CardHeader>
       <CardContent className="p-0 px-3">
         <p className="text-gray-700 mb-4">{description}</p>
-        {!!userId && (
-          <div className="flex items-center space-x-2 text-sm text-gray-500">
-            <UserIcon className="w-4 h-4" />
-            <span>ID пользователя: {userId}</span>
-          </div>
-        )}
       </CardContent>
       <CardFooter className="px-2 pt-0 pb-2">
         <Button
