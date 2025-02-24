@@ -1,5 +1,10 @@
+import { Suspense } from "react"
 import { CreateDocumentForm } from "../../@modal/(.)create-document/create-document-form"
 
 export default function CreateDocument() {
-  return <CreateDocumentForm />
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateDocumentForm />
+    </Suspense>
+  )
 }

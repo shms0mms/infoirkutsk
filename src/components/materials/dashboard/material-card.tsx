@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { MaterialCardActions } from "./material-card-actions"
@@ -34,10 +34,12 @@ export function MaterialCard(material: MaterialSchema) {
             <p>Описание: {material.description}</p>
           </div>
 
-          <MaterialCardActions
-            material={material}
-            setIsEditing={setIsEditing}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <MaterialCardActions
+              material={material}
+              setIsEditing={setIsEditing}
+            />
+          </Suspense>
         </div>
       )}
     </Card>

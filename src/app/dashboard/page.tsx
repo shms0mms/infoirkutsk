@@ -1,12 +1,10 @@
+import { Suspense } from "react"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { DashboardLinks } from "./dashboard-links"
 
 export default async function DashboardPage() {
-  const materials = []
-  const documents = []
-
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <header className="flex h-14 shrink-0 items-center gap-2">
         <div className="flex flex-1 items-center gap-2 px-3">
           <SidebarTrigger />
@@ -20,6 +18,6 @@ export default async function DashboardPage() {
           <DashboardLinks />
         </section>
       </div>
-    </>
+    </Suspense>
   )
 }
