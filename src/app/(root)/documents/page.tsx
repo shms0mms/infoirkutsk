@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { Pagination } from "@/components/ui/pagination"
 import { DocumentCard } from "@/components/documents/document-card"
 import { FilterPanel } from "./filter-panel"
@@ -26,7 +27,9 @@ export default async function DocumentsPage({
         <aside className="w-full md:w-1/4">
           <div className="sticky top-4">
             <h3 className="text-lg font-semibold mb-4">Фильтры</h3>
-            <FilterPanel initialFilters={filters} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <FilterPanel initialFilters={filters} />
+            </Suspense>
           </div>
         </aside>
         <main className="w-full md:w-3/4">
@@ -41,10 +44,12 @@ export default async function DocumentsPage({
               Документы не найдены
             </p>
           )}
-          <Pagination
-            currentPage={pageQuery}
-            totalPages={documents.length ? count / limit : 0}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Pagination
+              currentPage={pageQuery}
+              totalPages={documents.length ? count / limit : 0}
+            />
+          </Suspense>
         </main>
       </div>
     </div>

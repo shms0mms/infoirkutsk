@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import { Pagination } from "@/components/ui/pagination"
 import { MaterialCard } from "@/components/materials/material-card"
 import { api } from "@/trpc/server"
@@ -26,7 +27,9 @@ export default async function MaterialsPage({
             ))
           : null}
       </div>
-      <Pagination currentPage={+page! || 1} totalPages={count / limit} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <Pagination currentPage={+page! || 1} totalPages={count / limit} />
+      </Suspense>
     </section>
   )
 }
