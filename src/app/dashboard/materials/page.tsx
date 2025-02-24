@@ -1,10 +1,10 @@
 import { Suspense } from "react"
-import DashboardMaterials from "./dashboard-materials"
+import { MaterialsDashboard } from "./materials-dashboard"
 
 export default function DashboardPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <DashboardMaterials />
+      <MaterialsDashboard />
     </Suspense>
   )
 }

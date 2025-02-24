@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator"
 import { SignInForm } from "./sign-in-form"
 import { signIn } from "@/lib/auth"
 
-export default function SignIn() {
+export function SignIn() {
   const searchParams = useSearchParams()
 
   const signInWith = async (provider: "google") => {
