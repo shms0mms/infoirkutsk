@@ -15,7 +15,7 @@ export const Navigation = () => {
           key={item.title}
           href={item.href}
           className={cn(
-            "transition-color text-sm font-medium text-muted-foreground duration-200 hover:text-foreground",
+            "transition-color text-sm font-medium text-muted-foreground duration-200 hover:text-foreground whitespace-nowrap",
             { "text-foreground": pathname.startsWith(item.href) }
           )}
         >

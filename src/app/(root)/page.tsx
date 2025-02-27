@@ -1,11 +1,11 @@
 import { ArrowUpRight } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 import Balance from "react-wrap-balancer"
 import { Button } from "@/components/ui/button"
 import { Beam } from "@/components/ui/grid-beam"
 import { Spotlight } from "@/components/ui/spotlight"
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
-import { Footer } from "@/components/layout/home/footer"
 import { DocumentCard } from "@/components/documents/document-card"
 import { MaterialCard } from "@/components/materials/material-card"
 import { siteConfig } from "@/config"
@@ -24,14 +24,14 @@ export default async function Home() {
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left relative">
             <Beam className="-mt-12 -ml-2 hidden xl:block" />
-            <h1 className="my-6 text-pretty text-4xl font-bold lg:text-6xl">
+            <h1 className="my-6 text-pretty text-6xl font-bold lg:text-4xl">
               {siteConfig.title}
             </h1>
             <Balance>
               <TextGenerateEffect
                 words={siteConfig.description}
                 duration={0.25}
-                className="!text-sm sm:!text-base md:!text-lg mb-8 max-w-xl text-muted-foreground lg:text-xl"
+                className="!text-sm font-normal sm:!text-base md:!text-lg mb-8 max-w-xl text-muted-foreground lg:text-xl"
               />
             </Balance>
             <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start">
@@ -41,32 +41,56 @@ export default async function Home() {
                   <ArrowUpRight className="ml-2 size-4" />
                 </Link>
               </Button>
+              <Button
+                asChild
+                variant={"outline"}
+                className="w-full flex items-center sm:w-auto"
+              >
+                <Link href="https://academy-wincode.com" target="_blank">
+                  Прочитать об академии WinCode
+                  <ArrowUpRight className="ml-2 size-4" />
+                </Link>
+              </Button>
             </div>
           </div>
+          <Image
+            className="hidden lg:block"
+            alt="root"
+            src={"/root.png"}
+            width={600}
+            height={600}
+          />
         </div>
       </section>
       <section className="container min-h-[100vh] mb-10">
-        <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
-          Последние опубликованные материалы
-        </h2>
-        <div className="grid grid-cols-2 gap-10">
-          {materials?.map(material => (
-            <MaterialCard {...material} key={material.id} />
-          ))}
-        </div>
+        {!!materials?.length && (
+          <>
+            <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
+              Последние опубликованные материалы
+            </h2>
+            <div className="grid lg:grid-cols-2 gap-10 md:grid-cols-1 grid-cols-[290px]">
+              {materials?.map(material => (
+                <MaterialCard {...material} key={material.id} />
+              ))}
+            </div>
+          </>
+        )}
       </section>
 
       <section className="container min-h-[100vh]">
-        <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
-          Последние документы
-        </h2>
-        <div className="grid grid-cols-2 gap-10">
-          {documents?.map(document => (
-            <DocumentCard key={document.id} {...document} />
-          ))}
-        </div>
+        {!!documents?.length && (
+          <>
+            <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
+              Последние документы
+            </h2>
+            <div className="grid lg:grid-cols-2 gap-10 md:grid-cols-1 grid-cols-[290px]">
+              {documents?.map(document => (
+                <DocumentCard key={document.id} {...document} />
+              ))}
+            </div>
+          </>
+        )}
       </section>
-      <Footer />
     </div>
   )
 }

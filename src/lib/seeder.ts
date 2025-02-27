@@ -32,6 +32,7 @@ async function materials() {
     }
   }))
 }
+materials()
 
 async function documents() {
   await seed(db, { document: schema.document }).refine(f => ({
@@ -52,6 +53,7 @@ async function documents() {
     }
   }))
 }
+documents()
 
 async function organization() {
   for (const organization of organizations) {
@@ -66,15 +68,15 @@ async function organization() {
   }
 }
 
-organization()
+// organization()
 
-// async function createModerator() {
-//   await signUp.email({
-//     name: "Модератор",
-//     email: "wincode@gmail.com",
-//     password: "cm7g2oc0q00020ckyfkubh0jg",
-//     role: "moderator",
-//     emailVerified: true
-//   })
-// }
+async function createModerator() {
+  await signUp.email({
+    name: "Модератор",
+    email: "wincode@gmail.com",
+    password: "cm7g2oc0q00020ckyfkubh0jg",
+    role: "moderator",
+    emailVerified: true
+  })
+}
 // createModerator()

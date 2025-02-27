@@ -18,7 +18,7 @@ export function DocumentCard({
   createdAt
 }: DocumentSchema) {
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full">
       <CardHeader>
         <CardTitle className="text-xl font-bold">{title}</CardTitle>
         <CardDescription className="text-sm text-gray-500">

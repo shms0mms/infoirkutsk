@@ -22,13 +22,12 @@ export function MaterialCard({
   id
 }: MaterialSchema) {
   return (
-    <Card className="w-full max-w-2xl">
-      <Link href={`/materials/${id}`}>
-        {" "}
-        <CardHeader>
-          <div className="flex justify-between items-start">
-            <div>
-              <CardTitle className="text-2xl font-bold overflow-hidden text-ellipsis md:max-w-[290px] max-w-[490px]">
+    <Card className="w-full p-1">
+      <Link className="w-full" href={`/materials/${id}`}>
+        <CardHeader className="w-full">
+          <div className="flex justify-between items-start w-full">
+            <div className="w-[80%]">
+              <CardTitle className="text-2xl font-bold overflow-hidden text-ellipsis max-w-full">
                 {title}
               </CardTitle>
               <CardDescription className="mt-2  overflow-hidden text-ellipsis md:max-w-[290px] max-w-[490px]">

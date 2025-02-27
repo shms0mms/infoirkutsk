@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/react"
 import { type Metadata } from "next"
-import { Comfortaa, Inter } from "next/font/google"
+import { Comfortaa, Inter, Noto_Sans, Press_Start_2P } from "next/font/google"
 import { type PropsWithChildren } from "react"
 import { Providers } from "@/components/providers"
 import { cn } from "@/lib/utils"
@@ -18,9 +18,18 @@ const comfortaa = Comfortaa({
   subsets: ["latin"],
   variable: "--font-comfortaa"
 })
+const pressStart2p = Press_Start_2P({
+  subsets: ["cyrillic", "latin"],
+  variable: "--font-press-start-2p",
+  weight: ["400"]
+})
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
   variable: "--font-inter"
+})
+const notoSans = Noto_Sans({
+  subsets: ["latin", "cyrillic"],
+  variable: "--font-noto-sans"
 })
 
 type RootLayoutProps = {
@@ -34,7 +43,13 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(inter.variable, comfortaa.variable, "font-inter")}
+      className={cn(
+        inter.variable,
+        comfortaa.variable,
+        pressStart2p.variable,
+        notoSans.variable,
+        "font-inter"
+      )}
       suppressHydrationWarning
     >
       <head>
@@ -47,6 +62,9 @@ export default async function RootLayout({
           {modal}
         </Providers>
         <Analytics />
+        <div className="font-pressStart2p fixed bottom-1 right-1 text-sm opacity-30 hidden lg:block">
+          Разработано командой WinCode
+        </div>
       </body>
     </html>
   )

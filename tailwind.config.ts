@@ -74,7 +74,9 @@ const config = withUt({
       },
       fontFamily: {
         recursive: "var(--font-recursive)",
-        comfortaa: "var(--font-comfortaa)"
+        comfortaa: "var(--font-comfortaa)",
+        pressStart2p: "var(--font-press-start-2p)",
+        notoSans: "var(--font-noto-sans)"
       },
       colors: {
         border: "hsl(var(--border))",
