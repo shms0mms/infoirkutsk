@@ -103,7 +103,8 @@ const materialSchema = z.object({
   createdAt: z.date().nullable(),
   updatedAt: z.date().nullable(),
   userId: z.string(),
-  publishedAt: z.date().nullable()
+  publishedAt: z.date().nullable(),
+  categoryId: z.string().nullable()
 })
 const createMaterialFormSchema = z.object({
   title: z
@@ -128,7 +129,8 @@ const createMaterialFormSchema = z.object({
       required_error: "Введите ваше ФИО"
     })
     .min(1, "Введите ФИО"),
-  isDraft: z.boolean().default(false)
+  isDraft: z.boolean().default(false),
+  categoryId: z.string().optional()
 })
 const createMaterialSchema = z.object({
   title: z.string(),
@@ -137,7 +139,8 @@ const createMaterialSchema = z.object({
   author: z.string(),
   publishedAt: z.date().optional(),
   status: z.enum(STATUS),
-  fileType: z.enum(FILE_TYPE)
+  fileType: z.enum(FILE_TYPE),
+  categoryId: z.string().optional()
 })
 const notificationSchema = z.object({
   id: z.string(),
@@ -183,6 +186,10 @@ const createCommentSchema = z.object({
   toUserId: z.string()
 })
 
+const createCategorySchema = z.object({
+  name: z.string().min(1, "Название категории должно быть указано"),
+  slug: z.string().min(1, "Название категории должно быть указано")
+})
 const filtersSchema = z.object({
   titleTerm: z.string().optional(),
   descriptionTerm: z.string().optional(),
@@ -235,6 +242,7 @@ const userSchema = z.object({
 type UserSchema = z.infer<typeof userSchema>
 type DocumentSchema = z.infer<typeof documentSchema>
 type CreateDocumentSchema = z.infer<typeof createDocumentSchema>
+type CreateCategorySchema = z.infer<typeof createCategorySchema>
 type FiltersSchema = z.infer<typeof filtersSchema>
 type CreateCommentSchema = z.infer<typeof createCommentSchema>
 type MaterialSchema = z.infer<typeof materialSchema>
@@ -250,6 +258,7 @@ type CreateMaterialFormSchema = z.infer<typeof createMaterialFormSchema>
 
 export {
   commentSchema,
+  createCategorySchema,
   createCommentSchema,
   createDocumentSchema,
   createMaterialFormSchema,
@@ -269,6 +278,7 @@ export {
   STATUS,
   userAdditionalFields,
   type CommentSchema,
+  type CreateCategorySchema,
   type CreateCommentSchema,
   type CreateDocumentSchema,
   type CreateMaterialFormSchema,

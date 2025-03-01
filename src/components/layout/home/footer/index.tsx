@@ -24,7 +24,7 @@ export function Footer() {
           ))}
         </ul>
       </div>
-      <nav className="flex gap-7">
+      <nav className="flex gap-7 flex-col md:flex-row">
         {footerNav.map(f => (
           <ul key={f.id} className="flex flex-col gap-2 items-start">
             {f.items.map(item => (

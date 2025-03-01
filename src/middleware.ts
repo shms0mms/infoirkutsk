@@ -3,7 +3,12 @@ import { NextRequest, NextResponse } from "next/server"
 import { type Session } from "./server/auth"
 
 const protectedRoutes = ["/create-material", "/dashboard"]
-const moderatorRoutes = ["/create-document", "/dashboard/documents"]
+const moderatorRoutes = [
+  "/create-document",
+  "/dashboard/documents",
+  "/dashboard/categories",
+  "/create-category"
+]
 export const middleware = async (request: NextRequest) => {
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",

@@ -1,4 +1,12 @@
-import { FilesIcon, FileText, Home, LayoutDashboard, Send } from "lucide-react"
+import { IconCategoryPlus } from "@tabler/icons-react"
+import {
+  FilesIcon,
+  FileText,
+  Home,
+  LayoutDashboard,
+  Plus,
+  Send
+} from "lucide-react"
 import { useParams, usePathname } from "next/navigation"
 import { type FC } from "react"
 
@@ -60,6 +68,13 @@ export function useSidebarNav(): SidebarNav {
         permissions: "user"
       },
       {
+        title: "Создать материал",
+        href: "/create-material",
+        icon: Plus,
+        isActive: pathname === "/create-material",
+        permissions: "user"
+      },
+      {
         title: "Мои документы",
         href: "/dashboard/documents",
         icon: FileText,
@@ -71,6 +86,20 @@ export function useSidebarNav(): SidebarNav {
         href: "/dashboard/requests",
         icon: Send,
         isActive: pathname === "/dashboard/requests",
+        permissions: "moderator"
+      },
+      {
+        title: "Категории",
+        href: "/dashboard/categories",
+        icon: IconCategoryPlus,
+        isActive: pathname === "/dashboard/categories",
+        permissions: "moderator"
+      },
+      {
+        title: "Создать категорию",
+        href: "/create-category",
+        icon: IconCategoryPlus,
+        isActive: pathname === "/create-category",
         permissions: "moderator"
       }
     ]

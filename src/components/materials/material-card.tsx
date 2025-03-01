@@ -23,7 +23,7 @@ export function MaterialCard({
 }: MaterialSchema) {
   return (
     <Card className="w-full p-1">
-      <Link className="w-full" href={`/materials/${id}`}>
+      <Link className="w-full" href={`/materials/detail/${id}`}>
         <CardHeader className="w-full">
           <div className="flex justify-between items-start w-full">
             <div className="w-[80%]">

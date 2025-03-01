@@ -71,7 +71,7 @@ export const Settings = () => {
           name="organizationId"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Выбирите ваше учебное заведение</FormLabel>
+              <FormLabel>Выберите ваше учебное заведение</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger>

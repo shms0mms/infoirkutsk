@@ -7,29 +7,42 @@ import {
   protectedProcedure,
   publicProcedure
 } from "@/server/api/trpc"
-import { material } from "@/server/db/schema"
+import { category, material } from "@/server/db/schema"
 
 export const materialRouter = createTRPCRouter({
   getAll: publicProcedure
     .input(
       z.object({
         page: z.number().transform(page => page - 1),
-        limit: z.number().default(30)
+        limit: z.number().default(30),
+        slug: z.string().optional()
       })
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit
+      let categoryQuery = null
+      if (input.slug) {
+        categoryQuery = await ctx.db.query.category.findFirst({
+          where: eq(category.slug, input.slug!)
+        })
+      }
       const countQuery = ctx.db
         .select({
           count: count()
         })
         .from(material)
+        .where(
+          categoryQuery ? eq(material.categoryId, categoryQuery.id) : undefined
+        )
         .then(result => result[0]!.count)
 
       return await Promise.all([
         ctx.db.query.material.findMany({
           limit,
-          offset: input.page * limit
+          offset: input.page * limit,
+          where: categoryQuery
+            ? eq(material.categoryId, categoryQuery.id)
+            : undefined
         }),
         countQuery
       ])
@@ -79,7 +92,8 @@ export const materialRouter = createTRPCRouter({
         author: true,
         status: true,
         publishedAt: true,
-        id: true
+        id: true,
+        categoryId: true
       })
     )
     .mutation(async ({ ctx, input }) => {

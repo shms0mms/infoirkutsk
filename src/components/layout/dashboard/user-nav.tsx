@@ -37,7 +37,7 @@ export function UserNav({ className }: UserNavProps) {
   const sign = async (type: "out" | "in") => {
     if (type === "out") {
       await signOut()
-      toast.success(`Вы успешно вышли из системы.`)
+      toast.success(`Вы успешно вышли из системы`)
 
       router.push("/")
     } else router.push("/auth/sign-in")

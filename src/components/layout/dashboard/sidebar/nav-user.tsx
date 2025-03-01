@@ -30,9 +30,14 @@ export function NavUser({ user }: { user: UserSchema }) {
   const { isMobile } = useSidebar()
   const router = useRouter()
   const { data: notificationsCount } =
-    api.notifications.getCountOfNotifications.useQuery({
-      role: user?.role
-    })
+    api.notifications.getCountOfNotifications.useQuery(
+      {
+        role: user?.role
+      },
+      {
+        enabled: !!user
+      }
+    )
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -107,7 +112,7 @@ export function NavUser({ user }: { user: UserSchema }) {
             <DropdownMenuItem
               onClick={() => {
                 signOut()
-                toast.success(`Вы успешно вышли из системы.`)
+                toast.success(`Вы успешно вышли из системы`)
                 router.push("/")
               }}
               className="flex items-center gap-2 cursor-pointer"

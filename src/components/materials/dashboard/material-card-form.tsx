@@ -14,6 +14,15 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { materialSchema, MaterialSchema } from "@/lib/schemas"
 import { api } from "@/trpc/react"
@@ -39,6 +48,9 @@ export const MaterialCardForm = ({
       toast.success("Материал успешно изменён")
       setIsEditing(false)
     }
+  })
+  const { data: categories } = api.category.getAll.useQuery({
+    name: ""
   })
 
   const onSubmit: SubmitHandler<MaterialSchema> = (data: MaterialSchema) => {
@@ -92,6 +104,42 @@ export const MaterialCardForm = ({
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Выберите категорию</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value! || "Нет категории"}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите категорию (необязательно)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Категории</SelectLabel>
+                      {categories?.map(category => (
+                        <SelectItem
+                          className="max-w-[460px] overflow-hidden text-ellipsis"
+                          value={category.id}
+                          key={category.id}
+                        >
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage>
+                {form.formState.errors.categoryId?.message}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
         <Button type="submit">Сохранить</Button>
         <Button
           type="button"

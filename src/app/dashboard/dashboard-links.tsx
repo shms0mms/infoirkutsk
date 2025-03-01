@@ -40,7 +40,7 @@ export function DashboardLinks() {
   const { data } = useSession()
   const role = data?.user.role
   return (
-    <div className="flex flex-col space-y-4 w-full max-w-7xl">
+    <div className="flex flex-col space-y-4 w-full container">
       {role === "moderator" && (
         <>
           <DashboardLink

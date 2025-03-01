@@ -16,6 +16,15 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { FileUploadResponse } from "@/app/api/file-upload/route"
@@ -31,6 +40,9 @@ export function CreateMaterialForm() {
   const utils = api.useUtils()
   const searchParams = useSearchParams()
   const { mutate: notify } = api.notifications.create.useMutation()
+  const { data: categories } = api.category.getAll.useQuery({
+    name: ""
+  })
 
   const { mutate: create } = api.material.create.useMutation({
     onSuccess: () => {
@@ -56,7 +68,8 @@ export function CreateMaterialForm() {
       title: "",
       description: "",
       author: "",
-      isDraft: false
+      isDraft: false,
+      categoryId: ""
     }
   })
 
@@ -77,7 +90,10 @@ export function CreateMaterialForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2`">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-2 flex flex-col gap-3"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -157,7 +173,42 @@ export function CreateMaterialForm() {
             </FormItem>
           )}
         />
-
+        <FormField
+          control={form.control}
+          name="categoryId"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Выберите категорию</FormLabel>
+              <FormControl>
+                <Select
+                  value={field.value! || "Категория не выбрана"}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите категорию (необязательно)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Категории</SelectLabel>
+                      {categories?.map(category => (
+                        <SelectItem
+                          className="max-w-[460px] overflow-hidden text-ellipsis"
+                          value={category.id}
+                          key={category.id}
+                        >
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage>
+                {form.formState.errors.categoryId?.message}
+              </FormMessage>
+            </FormItem>
+          )}
+        />
         <Button type="submit" className="w-full">
           Создать материал
         </Button>

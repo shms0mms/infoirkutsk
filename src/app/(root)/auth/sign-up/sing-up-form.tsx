@@ -101,7 +101,7 @@ export function SignUpForm() {
           name="organizationId"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel>Выбирите ваше учебное заведение</FormLabel>
+              <FormLabel>Выберите ваше учебное заведение</FormLabel>
               <FormControl>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger>

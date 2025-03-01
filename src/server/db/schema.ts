@@ -108,7 +108,18 @@ export const material = createTable("material", {
   }),
   fileUrl: varchar("file_url", { length: 255 }).notNull(),
   author: varchar("author", { length: 255 }).notNull(),
-  fileType: varchar("file_type", { length: 255, enum: FILE_TYPE }).notNull()
+  fileType: varchar("file_type", { length: 255, enum: FILE_TYPE }).notNull(),
+  categoryId: varchar("category_id", { length: 255 })
+})
+
+export const category = createTable("category", {
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => createCuid()),
+
+  name: varchar("name", { length: 255 }).notNull(),
+  slug: varchar("slug", { length: 255 }).notNull()
 })
 
 export const comment = createTable("comment", {
