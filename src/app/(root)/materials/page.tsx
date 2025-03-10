@@ -45,6 +45,7 @@ export default async function MaterialsPage({
       <Suspense fallback={<div>Loading...</div>}>
         <Pagination currentPage={+page! || 1} totalPages={count / limit} />
       </Suspense>
+      <></>
     </section>
   )
 }
