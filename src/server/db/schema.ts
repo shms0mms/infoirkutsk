@@ -37,11 +37,7 @@ export const user = createTable("user", {
 
 export const organization = createTable("organization", {
   id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  director: text("director").notNull(),
-  phoneNumber: text("phone_number").unique(),
-  address: text("address").notNull(),
-  email: text("email").notNull()
+  name: text("name").notNull()
 })
 
 export const session = createTable("session", {

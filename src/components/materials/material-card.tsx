@@ -26,7 +26,7 @@ export function MaterialCard({
       <Link className="w-full" href={`/materials/detail/${id}`}>
         <CardHeader className="w-full">
           <div className="flex justify-between items-start w-full">
-            <div className="w-[80%]">
+            <div className="w-[50%]">
               <CardTitle className="text-2xl font-bold overflow-hidden text-ellipsis max-w-full">
                 {title}
               </CardTitle>
@@ -34,8 +34,13 @@ export function MaterialCard({
                 Автор: {author}
               </CardDescription>
             </div>
-            <Badge variant="secondary" className={"bg-blue-100 text-blue-800"}>
-              📄 {fileType?.toUpperCase()}
+            <Badge
+              variant="secondary"
+              className={"bg-blue-100 min-w-[20%] text-blue-800 "}
+            >
+              <span className="max-w-[80px] overflow-hidden text-ellipsis whitespace-nowrap">
+                📄 {fileType?.toUpperCase()}
+              </span>
             </Badge>
           </div>
         </CardHeader>

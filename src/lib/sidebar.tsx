@@ -75,7 +75,7 @@ export function useSidebarNav(): SidebarNav {
         permissions: "user"
       },
       {
-        title: "Мои документы",
+        title: "Нормативные документы",
         href: "/dashboard/documents",
         icon: FileText,
         isActive: pathname === "/dashboard/documents",

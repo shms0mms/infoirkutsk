@@ -32,7 +32,7 @@ async function materials() {
     }
   }))
 }
-materials()
+// materials()
 
 async function documents() {
   await seed(db, { document: schema.document }).refine(f => ({
@@ -53,7 +53,7 @@ async function documents() {
     }
   }))
 }
-documents()
+// documents()
 
 async function organization() {
   for (const organization of organizations) {
@@ -68,7 +68,7 @@ async function organization() {
   }
 }
 
-// organization()
+organization()
 
 async function createModerator() {
   await signUp.email({

@@ -15,5 +15,9 @@ export const navigation: NavItem[] = [
   {
     title: "Нормативные документы",
     href: "/documents"
+  },
+  {
+    title: "Узнать об разработчиках",
+    href: "https://academy-wincode.com"
   }
 ]

@@ -1,7 +1,6 @@
 import type { FC, PropsWithChildren } from "react"
 import { Header } from "@/components/layout/home/header"
 import { cn } from "@/lib/utils"
-import { Footer } from "./footer"
 
 type HomeLayoutProps = { className?: string }
 
@@ -20,7 +19,7 @@ const HomeLayout: FC<PropsWithChildren<HomeLayoutProps>> = ({
       >
         {children}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }

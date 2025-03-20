@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -46,15 +45,7 @@ export function SignUp() {
           </CardHeader>
           <CardContent className="space-y-2">
             <SignUpForm />
-            <Separator className="mx-auto w-4" />
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => signInWith("google")}
-            >
-              <Icons.google className="mr-2 h-5 w-5" />
-              Войти с помощью Google
-            </Button>
+
             <Separator className="mx-auto w-4" />
           </CardContent>
           <CardFooter>

@@ -24,7 +24,7 @@ export default async function Home() {
         <div className="grid items-center gap-8 lg:grid-cols-2">
           <div className="flex flex-col items-center text-center lg:items-start lg:text-left relative">
             <Beam className="-mt-12 -ml-2 hidden xl:block" />
-            <h1 className="my-6 text-pretty text-6xl font-bold lg:text-4xl">
+            <h1 className="my-6 text-pretty text-4xl font-bold lg:text-4xl">
               {siteConfig.title}
             </h1>
             <Balance>
@@ -38,16 +38,6 @@ export default async function Home() {
               <Button asChild className="w-full flex items-center sm:w-auto">
                 <Link href="/create-material" prefetch={true}>
                   Загрузить свой первый материал
-                  <ArrowUpRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                variant={"outline"}
-                className="w-full flex items-center sm:w-auto"
-              >
-                <Link href="https://academy-wincode.com" target="_blank">
-                  Прочитать об академии WinCode
                   <ArrowUpRight className="ml-2 size-4" />
                 </Link>
               </Button>
@@ -68,7 +58,7 @@ export default async function Home() {
             <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
               Последние опубликованные материалы
             </h2>
-            <div className="grid lg:grid-cols-2 gap-10 md:grid-cols-1 grid-cols-[290px]">
+            <div className="grid lg:grid-cols-2 gap-10 grid-cols-1">
               {materials?.map(material => (
                 <MaterialCard {...material} key={material.id} />
               ))}

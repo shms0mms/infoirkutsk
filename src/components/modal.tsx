@@ -9,6 +9,7 @@ import {
   CredenzaHeader,
   CredenzaTitle
 } from "@/components/ui/credenza"
+import { ScrollArea } from "./ui/scroll-area"
 
 type ModalProps = {
   title: React.ReactNode
@@ -32,7 +33,7 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
             <CredenzaDescription>{description}</CredenzaDescription>
           ) : null}
         </CredenzaHeader>
-        {children}
+        <ScrollArea className="max-h-96"> {children} </ScrollArea>
       </CredenzaContent>
     </Credenza>
   )

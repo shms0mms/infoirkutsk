@@ -62,7 +62,7 @@ export default async function RootLayout({
           {modal}
         </Providers>
         <Analytics />
-        <div className="font-pressStart2p fixed bottom-1 right-1 text-sm opacity-30 hidden lg:block">
+        <div className="font-pressStart2p fixed bottom-1 right-4 text-xs opacity-30 hidden lg:block">
           Разработано командой WinCode
         </div>
       </body>
