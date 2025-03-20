@@ -52,7 +52,7 @@ export default async function Home() {
           />
         </div>
       </section>
-      <section className="container min-h-[100vh] mb-10">
+      <section className="container mb-10">
         {!!materials?.length && (
           <>
             <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
@@ -67,7 +67,7 @@ export default async function Home() {
         )}
       </section>
 
-      <section className="container min-h-[100vh]">
+      <section className="container">
         {!!documents?.length && (
           <>
             <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
