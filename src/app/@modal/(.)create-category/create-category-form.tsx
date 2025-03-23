@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -20,7 +21,7 @@ import { api } from "@/trpc/react"
 export function CreateCategoryForm() {
   const utils = api.useUtils()
   const { mutate: notify } = api.notifications.create.useMutation()
-
+  const router = useRouter()
   const { mutate: create } = api.category.create.useMutation({
     onSuccess: () => {
       utils.category.getAll.invalidate()
@@ -30,6 +31,7 @@ export function CreateCategoryForm() {
         link: "/dashboard/categories",
         fromUser: true
       })
+      router.push("/dashboard/categories")
       toast.success("Категория успешно создана")
     },
     onError: error => {

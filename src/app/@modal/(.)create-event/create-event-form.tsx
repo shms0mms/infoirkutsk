@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -15,16 +16,18 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { createEventSchema, CreateEventSchema } from "@/lib/schemas"
+import { router } from "@/server/api/router"
 import { api } from "@/trpc/react"
 
 export function CreateEventForm() {
   const utils = api.useUtils()
-
+  const router = useRouter()
   const { mutate: create } = api.event.create.useMutation({
     onSuccess: () => {
       utils.category.getAll.invalidate()
 
       toast.success("Мероприятие/конкурс успешно создано")
+      router.push("/dashboard/events")
     },
     onError: error => {
       toast.error(`Ошибка: ${error.message}`)

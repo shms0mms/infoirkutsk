@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -20,7 +21,7 @@ import { api } from "@/trpc/react"
 export function CreateDocumentForm() {
   const utils = api.useUtils()
   const { mutate: notify } = api.notifications.create.useMutation()
-
+  const router = useRouter()
   const { mutate: create } = api.document.create.useMutation({
     onSuccess: () => {
       utils.document.getUserDocuments.invalidate()
@@ -31,6 +32,7 @@ export function CreateDocumentForm() {
         fromUser: true
       })
       toast.success("Документ успешно создан")
+      router.push("/dashboard/documents")
     },
     onError: error => {
       toast.error(`Ошибка: ${error.message}`)

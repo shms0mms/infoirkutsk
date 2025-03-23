@@ -1,7 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
@@ -43,7 +43,7 @@ export function CreateMaterialForm() {
   const { data: categories } = api.category.getAll.useQuery({
     name: ""
   })
-
+  const router = useRouter()
   const { mutate: create } = api.material.create.useMutation({
     onSuccess: () => {
       utils.material.getUserMaterials.invalidate({
@@ -56,6 +56,7 @@ export function CreateMaterialForm() {
         fromUser: true
       })
       toast.success("Материал успешно создан")
+      router.push("/dashboard/materials")
     },
     onError: error => {
       toast.error(`Ошибка: ${error.message}`)

@@ -1,7 +1,7 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { type FC, type PropsWithChildren } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState, type FC, type PropsWithChildren } from "react"
 import {
   Credenza,
   CredenzaContent,
@@ -22,9 +22,18 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
   description
 }) => {
   const router = useRouter()
+  const [open, setOpen] = useState(true)
+  const pathname = usePathname()
+
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+  useEffect(() => {
+    setOpen(true)
+  }, [])
   const handleOpenChange = () => router.back()
   return (
-    <Credenza open onOpenChange={handleOpenChange}>
+    <Credenza open={open} onOpenChange={handleOpenChange}>
       <CredenzaContent>
         <CredenzaHeader>
           <CredenzaTitle>{title}</CredenzaTitle>
