@@ -101,6 +101,20 @@ export function useSidebarNav(): SidebarNav {
         icon: IconCategoryPlus,
         isActive: pathname === "/create-category",
         permissions: "moderator"
+      },
+      {
+        title: "Создать мероприятие/конкурс",
+        href: "/create-event",
+        icon: IconCategoryPlus,
+        isActive: pathname === "/create-event",
+        permissions: "moderator"
+      },
+      {
+        title: "Мероприятия/конкурсы",
+        href: "/dashboard/events",
+        icon: IconCategoryPlus,
+        isActive: pathname === "/dashboard/events",
+        permissions: "moderator"
       }
     ]
   }

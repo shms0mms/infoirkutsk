@@ -1,6 +1,7 @@
 import { categoryRouter } from "./category"
 import { commentRouter } from "./comment"
 import { documentRouter } from "./document"
+import { eventRouter } from "./event"
 import { materialRouter } from "./material"
 import { notificationsRouter } from "./notification"
 import { organizationRouter } from "./organization"
@@ -15,5 +16,6 @@ export const router = {
   user: userRouter,
   organization: organizationRouter,
   requests: requestsRouter,
-  category: categoryRouter
+  category: categoryRouter,
+  event: eventRouter
 }

@@ -190,6 +190,11 @@ const createCategorySchema = z.object({
   name: z.string().min(1, "Название категории должно быть указано"),
   slug: z.string().min(1, "Название категории должно быть указано")
 })
+const createEventSchema = z.object({
+  name: z.string().min(1, "Название мероприятия должно быть указано"),
+  link: z.string().min(1, "Ссылка на мероприятие"),
+  description: z.string().min(1, "Описание мероприятия должно быть указано")
+})
 const filtersSchema = z.object({
   titleTerm: z.string().optional(),
   descriptionTerm: z.string().optional(),
@@ -255,12 +260,13 @@ type FileType = (typeof FILE_TYPE)[number]
 type CreateUserSchema = z.infer<typeof createUserSchema>
 type SignInSchema = z.infer<typeof signInSchema>
 type CreateMaterialFormSchema = z.infer<typeof createMaterialFormSchema>
-
+type CreateEventSchema = z.infer<typeof createEventSchema>
 export {
   commentSchema,
   createCategorySchema,
   createCommentSchema,
   createDocumentSchema,
+  createEventSchema,
   createMaterialFormSchema,
   createMaterialSchema,
   createUserSchema,
@@ -281,6 +287,7 @@ export {
   type CreateCategorySchema,
   type CreateCommentSchema,
   type CreateDocumentSchema,
+  type CreateEventSchema,
   type CreateMaterialFormSchema,
   type CreateMaterialSchema,
   type CreateUserSchema,

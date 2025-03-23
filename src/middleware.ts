@@ -7,7 +7,8 @@ const moderatorRoutes = [
   "/create-document",
   "/dashboard/documents",
   "/dashboard/categories",
-  "/create-category"
+  "/create-category",
+  "/create-event"
 ]
 export const middleware = async (request: NextRequest) => {
   const { data: session } = await betterFetch<Session>(

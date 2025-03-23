@@ -7,17 +7,19 @@ import { Beam } from "@/components/ui/grid-beam"
 import { Spotlight } from "@/components/ui/spotlight"
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect"
 import { DocumentCard } from "@/components/documents/document-card"
+import { EventCard } from "@/components/events/event-card"
 import { MaterialCard } from "@/components/materials/material-card"
 import { siteConfig } from "@/config"
 import { api } from "@/trpc/server"
 
 export default async function Home() {
-  const [[materials], [documents]] = await Promise.all([
+  const [[materials], [documents], events] = await Promise.all([
     api.material.getLast({ page: 1 }),
-    api.document.getLast({ page: 1 })
+    api.document.getLast({ page: 1 }),
+    api.event.getAll()
   ])
   return (
-    <div className="min-h-[calc(100vh-var(--dashboard-header-size))]) overflow-x-hidden relative rounded dark:bg-grid-white/[0.02]">
+    <div className="min-h-[calc(100vh-var(--dashboard-header-size))]) overflow-x-hidden relative rounded dark:bg-grid-white/[0.02] flex flex-col gap-20 pb-10">
       <Spotlight />
 
       <section className="container mt-4 min-h-[100vh] flex flex-col justify-center">
@@ -52,7 +54,7 @@ export default async function Home() {
           />
         </div>
       </section>
-      <section className="container mb-10">
+      <section className="container">
         {!!materials?.length && (
           <>
             <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
@@ -77,6 +79,18 @@ export default async function Home() {
               {documents?.map(document => (
                 <DocumentCard key={document.id} {...document} />
               ))}
+            </div>
+          </>
+        )}
+      </section>
+      <section className="container">
+        {!!events?.length && (
+          <>
+            <h2 className="mb-4 text-2xl font-bold md:mb-6 md:text-4xl">
+              Мероприятия/конкурсы
+            </h2>
+            <div className="grid lg:grid-cols-2 gap-10 md:grid-cols-1 grid-cols-[290px]">
+              {events?.map(event => <EventCard key={event.id} {...event} />)}
             </div>
           </>
         )}

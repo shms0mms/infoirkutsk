@@ -35,6 +35,15 @@ export const user = createTable("user", {
   organizationId: text("organization_id")
 })
 
+export const event = createTable("event", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createCuid()),
+  name: text("name").notNull(),
+  link: text("link").notNull(),
+  description: text("description").notNull()
+})
+
 export const organization = createTable("organization", {
   id: text("id").primaryKey(),
   name: text("name").notNull()
