@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import type { FC, PropsWithChildren } from "react"
+import { type FC, type PropsWithChildren } from "react"
 import {
   Credenza,
   CredenzaContent,
@@ -22,7 +22,6 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({
   description
 }) => {
   const router = useRouter()
-
   const handleOpenChange = () => router.back()
   return (
     <Credenza open onOpenChange={handleOpenChange}>
