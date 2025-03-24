@@ -26,6 +26,18 @@ export const eventRouter = createTRPCRouter({
         ...input
       })
     }),
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { id } = input
+      return await ctx.db.query.event.findFirst({
+        where: eq(event.id, id)
+      })
+    }),
   delete: moderatorProcedure
     .input(
       z.object({

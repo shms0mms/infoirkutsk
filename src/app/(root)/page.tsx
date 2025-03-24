@@ -18,6 +18,7 @@ export default async function Home() {
     api.document.getLast({ page: 1 }),
     api.event.getAll()
   ])
+
   return (
     <div className="min-h-[calc(100vh-var(--dashboard-header-size))]) overflow-x-hidden relative rounded dark:bg-grid-white/[0.02] flex flex-col gap-20 pb-10">
       <Spotlight />
