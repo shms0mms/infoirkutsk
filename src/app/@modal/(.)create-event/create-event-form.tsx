@@ -24,6 +24,7 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
+import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { createEventSchema, CreateEventSchema } from "@/lib/schemas"
 import { api } from "@/trpc/react"
@@ -80,9 +81,13 @@ export function CreateEventForm() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Краткое описание</FormLabel>
+              <FormLabel>Описание</FormLabel>
               <FormControl>
-                <Input {...field} placeholder="Описание" />
+                <Textarea
+                  className="max-h-[250px]"
+                  {...field}
+                  placeholder="Описание"
+                />
               </FormControl>
               <FormMessage>
                 {form.formState.errors.description?.message}
