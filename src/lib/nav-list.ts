@@ -17,6 +17,10 @@ export const navigation: NavItem[] = [
     href: "/documents"
   },
   {
+    title: "Мероприятия",
+    href: "/events"
+  },
+  {
     title: "Узнать об разработчиках",
     href: "https://academy-wincode.com"
   }

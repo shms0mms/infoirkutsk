@@ -192,7 +192,7 @@ const createCategorySchema = z.object({
 })
 const createEventSchema = z.object({
   name: z.string().min(1, "Название мероприятия должно быть указано"),
-  link: z.string().min(1, "Ссылка на мероприятие"),
+  date: z.string().min(1, "Дата мероприятия должно быть указано"),
   description: z.string().min(1, "Описание мероприятия должно быть указано")
 })
 const filtersSchema = z.object({

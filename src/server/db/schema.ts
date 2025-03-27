@@ -40,8 +40,8 @@ export const event = createTable("event", {
     .primaryKey()
     .$defaultFn(() => createCuid()),
   name: text("name").notNull(),
-  link: text("link").notNull(),
-  description: text("description").notNull()
+  description: text("description").notNull(),
+  date: timestamp("date").notNull()
 })
 
 export const organization = createTable("organization", {

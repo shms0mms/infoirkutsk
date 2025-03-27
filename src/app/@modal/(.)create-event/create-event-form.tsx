@@ -1,22 +1,31 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
+import { ru } from "date-fns/locale"
+import { CalendarIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
 import { createEventSchema, CreateEventSchema } from "@/lib/schemas"
-import { router } from "@/server/api/router"
 import { api } from "@/trpc/react"
 
 export function CreateEventForm() {
@@ -24,7 +33,7 @@ export function CreateEventForm() {
   const router = useRouter()
   const { mutate: create } = api.event.create.useMutation({
     onSuccess: () => {
-      utils.category.getAll.invalidate()
+      utils.event.getAll.invalidate()
 
       toast.success("Мероприятие/конкурс успешно создано")
       router.push("/dashboard/events")
@@ -39,7 +48,7 @@ export function CreateEventForm() {
     defaultValues: {
       name: "",
       description: "",
-      link: ""
+      date: ""
     }
   })
 
@@ -83,20 +92,44 @@ export function CreateEventForm() {
         />
         <FormField
           control={form.control}
-          name="link"
+          name="date"
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>
-                Оставьте ссылку на ваше мероприятие или конкурс
-              </FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  className="max-h-[200px]"
-                  placeholder="Ссылка на мероприятие/конкурс"
-                />
-              </FormControl>
-              <FormMessage>{form.formState.errors.link?.message}</FormMessage>
+            <FormItem className="flex flex-col w-full">
+              <FormLabel>Дата начала</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full pl-3 text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP", { locale: ru })
+                      ) : (
+                        <span>Выберите дату</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <Calendar
+                    selected={field.value as unknown as Date}
+                    onSelect={date => {
+                      field.onChange(date?.toString())
+                    }}
+                    locale={ru}
+                    mode="single"
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormDescription>
+                Дата начала мероприятия/конкурса
+              </FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

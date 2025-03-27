@@ -20,12 +20,12 @@ import { api } from "@/trpc/react"
 export function EventCard({
   name,
   description,
-  link,
+  date,
   id
 }: {
   name: string
   description: string
-  link: string
+  date: Date
   id: string
 }) {
   const utils = api.useUtils()
@@ -41,14 +41,10 @@ export function EventCard({
         <div className="space-y-1">
           <h3 className="font-semibold tracking-tight">{name}</h3>
           <p className="text-sm text-muted-foreground">{description}</p>
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-base text-blue-500"
-          >
-            {link}
-          </a>
+          <p className="text-sm text-muted-foreground">
+            {" "}
+            Дата начала {date.toLocaleDateString()}
+          </p>
         </div>
       </CardContent>
       <CardFooter>

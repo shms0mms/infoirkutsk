@@ -59,10 +59,7 @@ async function organization() {
   for (const organization of organizations) {
     await db.insert(schema.organization).values({
       name: organization.name,
-      director: organization.director,
-      address: organization.address,
-      email: organization.email,
-      phoneNumber: organization.phoneNumber,
+
       id: schema.createCuid()
     })
   }

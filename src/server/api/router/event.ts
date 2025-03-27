@@ -15,16 +15,16 @@ export const eventRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().min(1, "Название мероприятия должно быть указано"),
-        link: z.string().min(1, "Ссылка на мероприятие"),
+        date: z.string().min(1, "Дата мероприятия должно быть указано"),
         description: z
           .string()
           .min(1, "Описание мероприятия должно быть указано")
       })
     )
     .mutation(async ({ ctx, input }) => {
-      return await ctx.db.insert(event).values({
-        ...input
-      })
+      return await ctx.db
+        .insert(event)
+        .values({ ...input, date: new Date(input.date) })
     }),
   getById: publicProcedure
     .input(
